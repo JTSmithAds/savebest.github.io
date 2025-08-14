@@ -5,126 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Net Worth Wizard</title>
   <style>
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: #ffffff;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-
-    .wizard-container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-      background-color: #ffffff;
-      text-align: center;
-    }
-
-    .logo img {
-      max-width: 220px;
-      height: auto;
-      margin-bottom: 1.5rem;
-    }
-
-    .progress-bar {
-      background-color: #e6e6e6;
-      border-radius: 5px;
-      overflow: hidden;
-      height: 6px;
-      margin-bottom: 1rem;
-    }
-
-    .progress-fill {
-      background-color: #3f6b5d;
-      width: 0%;
-      height: 100%;
-      transition: width 0.3s ease;
-    }
-
-    .progress-label {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #3f6b5d;
-      margin-bottom: 1rem;
-    }
-
-    .question {
-      font-size: 1.4rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
-
-    .subtext {
-      font-size: 0.95rem;
-      color: #666;
-      margin-bottom: 1.25rem;
-    }
-
-    .grid-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .option-button, .submit-button {
-      padding: 1rem;
-      font-size: 1rem;
-      background-color: #f5f5f5;
-      color: #333;
-      border: 2px solid #ddd;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s, border-color 0.2s;
-    }
-
-    .option-button:hover, .submit-button:hover {
-      background-color: #e0e0e0;
-      border-color: #3f6b5d;
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .nav-links a {
-      color: #888;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
+    body { font-family: 'Helvetica Neue', sans-serif; background-color: #ffffff; margin: 0; padding: 0; color: #333; }
+    .wizard-container { max-width: 480px; margin: 0 auto; padding: 2rem 1rem; background-color: #ffffff; text-align: center; }
+    .logo img { max-width: 220px; height: auto; margin-bottom: 1.5rem; }
+    .progress-bar { background-color: #e6e6e6; border-radius: 5px; overflow: hidden; height: 6px; margin-bottom: 1rem; }
+    .progress-fill { background-color: #3f6b5d; width: 33.333%; height: 100%; transition: width 0.3s ease; }
+    .progress-label { text-align: center; font-size: 0.9rem; color: #3f6b5d; margin-bottom: 1rem; height: 0; overflow: hidden; }
+    .question { font-size: 1.4rem; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+    .subtext { font-size: 0.95rem; color: #666; margin-bottom: 1.25rem; }
+    .grid-buttons { display: flex; flex-direction: column; gap: 0.75rem; }
+    .option-button, .submit-button { padding: 1rem; font-size: 1rem; background-color: #f5f5f5; color: #333; border: 2px solid #ddd; border-radius: 30px; cursor: pointer; font-weight: bold; transition: background-color 0.2s, border-color 0.2s; }
+    .option-button:hover, .submit-button:hover { background-color: #e0e0e0; border-color: #3f6b5d; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 1rem; }
+    .nav-links { display: flex; gap: 1rem; }
+    .nav-links a { color: #888; text-decoration: none; cursor: pointer; }
     .hidden { display: none; }
-
-    .email-input {
-      padding: 0.8rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-bottom: 1rem;
-      width: 100%;
-    }
+    .email-input { padding: 0.8rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 1rem; width: 100%; }
   </style>
 </head>
 <body>
 
 <div class="wizard-container">
-  <div class="logo">
-    <img src="/assets/logo.png" alt="SaveBest.org Logo">
-  </div>
+  <div class="logo"><img src="/assets/logo.png" alt="SaveBest.org Logo"></div>
 
   <div class="top-bar">
-    <div class="progress-label" id="progress-text">Step 1 of 1</div>
+    <div class="progress-label" id="progress-text"></div>
     <div class="nav-links">
       <a onclick="goPrev()" id="previous-link" class="hidden">Previous</a>
       <a href="#">Help</a>
@@ -132,9 +37,7 @@
     </div>
   </div>
 
-  <div class="progress-bar">
-    <div class="progress-fill" id="progress-fill"></div>
-  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
   <div id="step-1" class="step">
     <div class="question">How much liquid net worth do you have? That's cash, bank accounts, stocks, and retirement</div>
@@ -160,21 +63,15 @@
   </div>
 
   <div id="step-3" class="step hidden">
-    <div class="logo">
-      <img src="https://www.empower.com/themes/custom/wealth_management_v2/images/branding/logo-new-alt.svg" alt="Empower Logo">
-    </div>
+    <div class="logo"><img src="https://www.empower.com/themes/custom/wealth_management_v2/images/branding/logo-new-alt.svg" alt="Empower Logo"></div>
     <div class="question" id="empower-recommendation">We Rank Empower's Free Net Worth Tracker #1 for users with $X in liquid net worth.</div>
-    <div class="grid-buttons">
-      <button class="option-button" onclick="redirectToEmpower()">Continue</button>
-    </div>
+    <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Continue</button></div>
   </div>
 
   <div id="step-4" class="step hidden">
     <div class="question">We'll update you with new powerful ways to level up your finances</div>
     <input type="email" placeholder="Enter your email" class="email-input">
-    <div class="grid-buttons">
-      <button class="submit-button">Submit</button>
-    </div>
+    <div class="grid-buttons"><button class="submit-button">Submit</button></div>
   </div>
 </div>
 
@@ -184,69 +81,53 @@
   let stepOrder = ['1'];
   let currentIndex = 0;
 
-  function setStepOrder(order) {
-    stepOrder = order;
-    currentIndex = 0;
-    updateProgress();
-  }
+  function setStepOrder(order) { stepOrder = order; currentIndex = 0; syncHash(stepOrder[currentIndex]); updateProgress(); }
 
   function selectAssets(value) {
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
-    if (highValue.includes(value)) {
-      setStepOrder(['1','3','4']);
-      document.getElementById('empower-recommendation').textContent = `We Rank Empower's Free Net Worth Tracker #1 for users with ${assetRange} in liquid net worth.`;
-      goTo('3');
-    } else {
-      setStepOrder(['1','2']);
-      goTo('2');
-    }
+    if (highValue.includes(value)) { setStepOrder(['1','3','4']); document.getElementById('empower-recommendation').textContent = `We Rank Empower's Free Net Worth Tracker #1 for users with ${assetRange} in liquid net worth.`; goTo('3'); }
+    else { setStepOrder(['1','2']); goTo('2'); }
   }
 
-  function nextStep(value) {
-    trackingMethod = value || trackingMethod;
-    if (currentIndex < stepOrder.length - 1) {
-      goTo(stepOrder[currentIndex + 1]);
-    }
-  }
+  function nextStep(value) { trackingMethod = value || trackingMethod; if (currentIndex < stepOrder.length - 1) goTo(stepOrder[currentIndex + 1]); }
 
-  function goTo(id) {
-    document.getElementById(`step-${stepOrder[currentIndex]}`).classList.add('hidden');
-    const newIndex = stepOrder.indexOf(id);
-    currentIndex = newIndex === -1 ? currentIndex : newIndex;
-    document.getElementById(`step-${stepOrder[currentIndex]}`).classList.remove('hidden');
-    updateProgress();
-  }
+  function goTo(id) { toggle(currentIndex, true); const newIndex = stepOrder.indexOf(id); currentIndex = newIndex === -1 ? currentIndex : newIndex; toggle(currentIndex, false); syncHash(stepOrder[currentIndex]); updateProgress(); }
 
-  function goPrev() {
-    if (currentIndex === 0) return;
-    document.getElementById(`step-${stepOrder[currentIndex]}`).classList.add('hidden');
-    currentIndex -= 1;
-    document.getElementById(`step-${stepOrder[currentIndex]}`).classList.remove('hidden');
-    updateProgress();
-  }
+  function goPrev() { if (currentIndex === 0) return; history.back(); }
+
+  function toggle(index, hide) { const el = document.getElementById(`step-${stepOrder[index]}`); if (!el) return; el.classList[hide ? 'add' : 'remove']('hidden'); }
 
   function updateProgress() {
     const total = stepOrder.length;
     const at = currentIndex + 1;
-    document.getElementById('progress-text').textContent = `Step ${at} of ${total}`;
-    document.getElementById('progress-fill').style.width = `${(at / total) * 100}%`;
+    document.getElementById('progress-fill').style.width = `${(at / Math.max(total,3)) * 100}%`;
     const prevLink = document.getElementById('previous-link');
     if (currentIndex > 0) prevLink.classList.remove('hidden'); else prevLink.classList.add('hidden');
   }
 
   function redirectToEmpower() {
     let url = '';
-    if (!trackingMethod || trackingMethod === "I don't track my net worth") {
-      url = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1223670&trid=1368848.157618&foc=16&fot=9999&fos=6';
-    } else {
-      url = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1129096&trid=1368848.157618&foc=16&fot=9999&fos=6';
-    }
+    if (!trackingMethod || trackingMethod === "I don't track my net worth") url = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1223670&trid=1368848.157618&foc=16&fot=9999&fos=6';
+    else url = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1129096&trid=1368848.157618&foc=16&fot=9999&fos=6';
     window.open(url, '_blank');
     document.title = 'Level Up! Add Your Information to Advance';
     goTo('4');
   }
 
+  function syncHash(stepId) { const desired = `#${stepId}`; if (location.hash !== desired) location.hash = desired; }
+
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.replace('#','');
+    const idx = stepOrder.indexOf(id);
+    if (idx !== -1 && idx !== currentIndex) { toggle(currentIndex, true); currentIndex = idx; toggle(currentIndex, false); updateProgress(); }
+  });
+
+  if (!location.hash) syncHash(stepOrder[currentIndex]); else {
+    const id = location.hash.replace('#','');
+    if (stepOrder.includes(id)) { toggle(currentIndex, true); currentIndex = stepOrder.indexOf(id); toggle(currentIndex, false); }
+    else syncHash(stepOrder[currentIndex]);
+  }
   updateProgress();
 </script>
 
