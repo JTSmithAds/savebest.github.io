@@ -100,6 +100,37 @@
       background-color: #f8f8f8;
     }
     
+    /* Hamburger Menu Styles */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 0.5rem;
+      background: none;
+      border: none;
+    }
+    
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: #333;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+    
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+    
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
+    }
+    
     .main-container {
       max-width: 800px;
       margin: 0 auto;
@@ -225,17 +256,73 @@
     
     @media (max-width: 768px) {
       .nav-container {
-        flex-direction: column;
-        gap: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+      }
+      
+      .hamburger {
+        display: flex;
       }
       
       .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background-color: #ffffff;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0;
+        padding: 2rem 1rem;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        transition: right 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+      }
+      
+      .nav-menu.active {
+        right: 0;
+      }
+      
+      .nav-item {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      .nav-link {
+        display: block;
+        padding: 1rem;
+        border-radius: 8px;
+        width: 100%;
+        text-align: left;
+      }
+      
+      .dropdown-content {
+        position: static;
+        box-shadow: none;
+        margin-top: 0.5rem;
+        border-radius: 8px;
+        background-color: #f8f8f8;
+        display: none;
+      }
+      
+      .dropdown.active .dropdown-content {
+        display: block;
+      }
+      
+      .dropdown-content a {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e0e0e0;
       }
       
       .hero-title {
         font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
       }
       
       .main-container {
@@ -244,6 +331,45 @@
       
       .features-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .feature-card {
+        padding: 1.5rem;
+      }
+      
+      .cta-button, .secondary-button {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+        text-align: center;
+      }
+      
+      .section-title {
+        font-size: 1.6rem;
+      }
+      
+      .section-content {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .main-container {
+        padding: 1.5rem 1rem;
+      }
+      
+      .nav-menu {
+        width: 100%;
+        right: -100%;
       }
     }
   </style>
@@ -256,9 +382,15 @@
       <img src="/assets/logo.png" alt="SaveBest.org Logo">
     </div>
     
-    <nav class="nav-menu">
+    <button class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav class="nav-menu" id="nav-menu">
       <div class="nav-item dropdown">
-        <a href="#" class="nav-link">Financial Tools ▼</a>
+        <a href="#" class="nav-link" onclick="toggleDropdown(event, this)">Financial Tools ▼</a>
         <div class="dropdown-content">
           <a href="/lp/net-worth.html">Net Worth Tracker</a>
           <a href="#">Budget Planner</a>
@@ -268,7 +400,7 @@
       </div>
       
       <div class="nav-item dropdown">
-        <a href="#" class="nav-link">Savings Guides ▼</a>
+        <a href="#" class="nav-link" onclick="toggleDropdown(event, this)">Savings Guides ▼</a>
         <div class="dropdown-content">
           <a href="#">Emergency Fund</a>
           <a href="#">Retirement Planning</a>
@@ -278,7 +410,7 @@
       </div>
       
       <div class="nav-item dropdown">
-        <a href="#" class="nav-link">Product Reviews ▼</a>
+        <a href="#" class="nav-link" onclick="toggleDropdown(event, this)">Product Reviews ▼</a>
         <div class="dropdown-content">
           <a href="#">Best Credit Cards</a>
           <a href="#">High-Yield Savings</a>
@@ -397,6 +529,86 @@
 <div class="footer">
   <p>&copy; 2024 SaveBest.org. All rights reserved. | <a href="#" style="color: #3f6b5d;">Privacy Policy</a> | <a href="#" style="color: #3f6b5d;">Terms of Service</a></p>
 </div>
+
+<script>
+  // User ID System
+  function generateUserId() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 20; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+  
+  function getOrCreateUserId() {
+    let userId = localStorage.getItem('sabeid');
+    if (!userId) {
+      userId = generateUserId();
+      localStorage.setItem('sabeid', userId);
+    }
+    return userId;
+  }
+  
+  // Initialize user ID on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const userId = getOrCreateUserId();
+    console.log('User ID:', userId);
+  });
+  
+  // Mobile menu functionality
+  function toggleMenu() {
+    const navMenu = document.getElementById('nav-menu');
+    const hamburger = document.querySelector('.hamburger');
+    
+    navMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+  }
+  
+  // Mobile dropdown functionality
+  function toggleDropdown(event, element) {
+    if (window.innerWidth <= 768) {
+      event.preventDefault();
+      const dropdown = element.parentElement;
+      const dropdownContent = dropdown.querySelector('.dropdown-content');
+      
+      // Close other dropdowns
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      allDropdowns.forEach(dd => {
+        if (dd !== dropdown) {
+          dd.classList.remove('active');
+        }
+      });
+      
+      dropdown.classList.toggle('active');
+    }
+  }
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const navMenu = document.getElementById('nav-menu');
+    const hamburger = document.querySelector('.hamburger');
+    
+    if (!navMenu.contains(event.target) && !hamburger.contains(event.target)) {
+      navMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+    }
+  });
+  
+  // Close menu when window is resized to desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+      const navMenu = document.getElementById('nav-menu');
+      const hamburger = document.querySelector('.hamburger');
+      navMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+      
+      // Reset dropdowns
+      const allDropdowns = document.querySelectorAll('.dropdown');
+      allDropdowns.forEach(dd => dd.classList.remove('active'));
+    }
+  });
+</script>
 
 </body>
 </html>
