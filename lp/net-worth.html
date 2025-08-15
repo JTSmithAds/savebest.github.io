@@ -11,6 +11,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Net Worth Calculator - Track Your Wealth in 60 Seconds | SaveBest.org</title>
+  <script src="/assets/affiliate-config.js"></script>
   <style>
     body { font-family: 'Helvetica Neue', sans-serif; background-color: #ffffff; margin: 0; padding: 0; color: #333; }
     .wizard-container { max-width: 480px; margin: 0 auto; padding: 2rem 1rem; background-color: #ffffff; text-align: center; }
@@ -37,6 +38,13 @@
     .help-tooltip .close-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
     .help-tooltip .close-btn:hover { color: #333; }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
+    .recommendation-card { background-color: #f8f8f8; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; text-align: left; }
+    .recommendation-card h3 { margin: 0 0 0.5rem 0; color: #3f6b5d; font-size: 1.1rem; }
+    .recommendation-card p { margin: 0 0 1rem 0; color: #666; font-size: 0.9rem; }
+    .recommendation-card .cta-button { display: inline-block; padding: 0.75rem 1.5rem; background-color: #3f6b5d; color: white; text-decoration: none; border-radius: 25px; font-size: 0.9rem; font-weight: bold; }
+    .recommendation-card .cta-button:hover { background-color: #2d4f43; }
+    .recommendation-grid { display: grid; gap: 1rem; margin-bottom: 1.5rem; }
+    .age-input { padding: 0.8rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 1rem; width: 100%; text-align: center; }
   </style>
 </head>
 <body>
@@ -84,6 +92,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div id="step-3" class="step hidden">
+    <div class="question">What's your age range?</div>
+    <div class="subtext">This helps us recommend age-appropriate financial strategies and products.</div>
+    <div class="grid-buttons">
+      <button class="option-button" onclick="nextStep('18-25')">18-25</button>
+      <button class="option-button" onclick="nextStep('26-35')">26-35</button>
+      <button class="option-button" onclick="nextStep('36-45')">36-45</button>
+      <button class="option-button" onclick="nextStep('46-55')">46-55</button>
+      <button class="option-button" onclick="nextStep('56-65')">56-65</button>
+      <button class="option-button" onclick="nextStep('65+')">65+</button>
+    </div>
+  </div>
+
+  <div id="step-4" class="step hidden">
+    <div class="question">What's your biggest financial goal right now?</div>
+    <div class="subtext">This helps us prioritize the most relevant tools and strategies for you.</div>
+    <div class="grid-buttons">
+      <button class="option-button" onclick="nextStep('Build Emergency Fund')">Build Emergency Fund</button>
+      <button class="option-button" onclick="nextStep('Pay Off Debt')">Pay Off Debt</button>
+      <button class="option-button" onclick="nextStep('Save for Retirement')">Save for Retirement</button>
+      <button class="option-button" onclick="nextStep('Invest for Growth')">Invest for Growth</button>
+      <button class="option-button" onclick="nextStep('Buy a Home')">Buy a Home</button>
+      <button class="option-button" onclick="nextStep('Start a Business')">Start a Business</button>
+    </div>
+  </div>
+
+  <div id="step-5" class="step hidden">
+    <div class="question">Do you have any of these financial products?</div>
+    <div class="subtext">This helps us identify gaps in your financial portfolio.</div>
+    <div class="grid-buttons">
+      <button class="option-button" onclick="nextStep('Credit Card')">Credit Card</button>
+      <button class="option-button" onclick="nextStep('Investment Account')">Investment Account</button>
+      <button class="option-button" onclick="nextStep('Life Insurance')">Life Insurance</button>
+      <button class="option-button" onclick="nextStep('None of the above')">None of the above</button>
+    </div>
+  </div>
+
+  <div id="step-6" class="step hidden">
     <div class="logo"><img src="/assets/empower-logo.svg" alt="Empower Logo"></div>
     <div class="question" id="empower-recommendation">🎯 Perfect Match Found!</div>
     <div class="subtext" id="empower-subtext">Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.</div>
@@ -91,7 +136,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Get Started Free →</button></div>
   </div>
 
-  <div id="step-4" class="step hidden">
+  <div id="step-7" class="step hidden">
+    <div class="question">Your Personalized Financial Recommendations</div>
+    <div class="subtext">Based on your ${assetRange} net worth and ${financialGoal}, here are the best tools to accelerate your wealth building:</div>
+    
+    <div class="recommendation-grid" id="recommendations-container">
+      <!-- Dynamic recommendations will be inserted here -->
+    </div>
+    
+    <div class="grid-buttons"><button class="option-button" onclick="goTo('8')">Continue to Email Capture →</button></div>
+  </div>
+
+  <div id="step-8" class="step hidden">
     <div class="question">Get Your Personalized Financial Roadmap</div>
     <div class="subtext">We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.</div>
     <div class="benefit-text">✓ Weekly wealth-building tips • Exclusive tool access • No spam, unsubscribe anytime</div>
@@ -142,6 +198,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   
   let trackingMethod = '';
   let assetRange = '';
+  let ageRange = '';
+  let financialGoal = '';
+  let financialProducts = '';
   let stepOrder = ['1'];
   let currentIndex = 0;
 
@@ -179,26 +238,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
     if (highValue.includes(value)) { 
-      setStepOrder(['1','3','4']); 
-      document.getElementById('empower-recommendation').textContent = `🎯 Perfect Match Found!`;
-      document.getElementById('empower-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.`;
+      setStepOrder(['1','3','4','5','6','7','8']); 
       goTo('3'); 
     }
     else { 
-      setStepOrder(['1','2']); 
+      setStepOrder(['1','2','3','4','5','6','7','8']); 
       goTo('2'); 
     }
   }
 
   function nextStep(value) { 
+    const currentStep = stepOrder[currentIndex];
+    
     if (value) {
-      trackFormEvent('net-worth', '2', 'select', value);
-      trackingMethod = value;
+      trackFormEvent('net-worth', currentStep, 'select', value);
+      
+      // Store the value based on current step
+      switch(currentStep) {
+        case '2':
+          trackingMethod = value;
+          break;
+        case '3':
+          ageRange = value;
+          break;
+        case '4':
+          financialGoal = value;
+          break;
+        case '5':
+          financialProducts = value;
+          break;
+      }
     }
+    
     if (currentIndex < stepOrder.length - 1) goTo(stepOrder[currentIndex + 1]); 
   }
 
-  function goTo(id) { toggle(currentIndex, true); const newIndex = stepOrder.indexOf(id); currentIndex = newIndex === -1 ? currentIndex : newIndex; toggle(currentIndex, false); syncHash(stepOrder[currentIndex]); updateProgress(); }
+  function goTo(id) { 
+    toggle(currentIndex, true); 
+    const newIndex = stepOrder.indexOf(id); 
+    currentIndex = newIndex === -1 ? currentIndex : newIndex; 
+    toggle(currentIndex, false); 
+    syncHash(stepOrder[currentIndex]); 
+    updateProgress(); 
+    
+    // Display recommendations when reaching step 7
+    if (id === '7') {
+      displayRecommendations();
+    }
+  }
 
   function goPrev() { if (currentIndex === 0) return; history.back(); }
 
@@ -236,7 +323,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function redirectToEmpower() {
-    trackFormEvent('net-worth', '3', 'click', 'continue');
+    trackFormEvent('net-worth', '6', 'click', 'continue');
     
     // Get user ID and gclid
     const sabeid = getOrCreateUserId();
@@ -248,7 +335,60 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     window.open(url, '_blank');
     document.title = 'Level Up! Add Your Information to Advance';
-    goTo('4');
+    goTo('7');
+  }
+
+  function generateRecommendations() {
+    // Create user data object for the affiliate system
+    const userData = {
+      assetRange: assetRange,
+      financialGoal: financialGoal,
+      ageRange: ageRange,
+      financialProducts: financialProducts,
+      trackingMethod: trackingMethod
+    };
+
+    // Get personalized recommendations from the affiliate system
+    let recommendations = getPersonalizedRecommendations(userData);
+
+    // Always include Empower as the first recommendation
+    const sabeid = getOrCreateUserId();
+    const gclid = getGclid();
+    const empowerRecommendation = {
+      title: "🎯 Empower - Free Net Worth Tracker",
+      description: "Sync all your accounts automatically and get professional-grade insights. Perfect for your financial situation.",
+      cta: "Start Free",
+      url: `https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1058727&trid=1368848.157618&foc=16&fot=9999&fos=6&fobs=${sabeid}&fobs2=${gclid}`,
+      commission: "Free",
+      category: "tracking"
+    };
+
+    // Combine Empower with other recommendations, limiting to 5 total
+    recommendations = [empowerRecommendation, ...recommendations.slice(0, 4)];
+
+    return recommendations;
+  }
+
+  function displayRecommendations() {
+    const recommendations = generateRecommendations();
+    const container = document.getElementById('recommendations-container');
+    
+    container.innerHTML = '';
+    
+    recommendations.forEach(rec => {
+      const card = document.createElement('div');
+      card.className = 'recommendation-card';
+      card.innerHTML = `
+        <h3>${rec.title}</h3>
+        <p>${rec.description}</p>
+        <a href="${rec.url}" target="_blank" class="cta-button" onclick="trackRecommendationClick('${rec.title}')">${rec.cta} →</a>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function trackRecommendationClick(recommendationTitle) {
+    trackFormEvent('net-worth', '7', 'click', recommendationTitle);
   }
 
   function isValidEmail(email) {
@@ -261,17 +401,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const email = emailInput.value.trim();
     
     if (isValidEmail(email)) {
-      trackFormEvent('net-worth', '4', 'submit', email);
+      trackFormEvent('net-worth', '8', 'submit', email);
       // Store user preferences
       localStorage.setItem('savebest_user_preferences', JSON.stringify({
         asset_range: assetRange,
         tracking_method: trackingMethod,
+        age_range: ageRange,
+        financial_goal: financialGoal,
+        financial_products: financialProducts,
         email: email
       }));
       // Here you would typically send the data to your backend
       alert('Thank you! We\'ll be in touch soon.');
     } else {
-      trackFormEvent('net-worth', '4', 'invalid_email', email);
+      trackFormEvent('net-worth', '8', 'invalid_email', email);
       alert('Please enter a valid email address.');
     }
   }
@@ -304,10 +447,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         content: "Understanding how you currently manage your finances helps us recommend the right solution. If you're using spreadsheets, you might need something more automated. If you're already using apps, we can suggest upgrades. If you're not tracking at all, we'll start with the basics."
       },
       '3': {
+        title: "Why are we asking about your age?",
+        content: "Age plays a crucial role in financial planning. Younger investors can take more risks, while older individuals need more conservative strategies. This helps us recommend age-appropriate products and strategies."
+      },
+      '4': {
+        title: "Why are we asking about your financial goals?",
+        content: "Your goals determine which financial products and strategies will be most beneficial. Whether you're saving for a home, paying off debt, or building retirement wealth, different tools work better for different objectives."
+      },
+      '5': {
+        title: "Why are we asking about your current financial products?",
+        content: "This helps us identify gaps in your financial portfolio and recommend products that complement what you already have, rather than duplicating existing coverage."
+      },
+      '6': {
         title: "Why are we recommending Empower?",
         content: "Based on your financial situation, Empower offers the best combination of features, ease of use, and value. It's free forever, syncs with all your accounts automatically, and provides professional-grade insights. We've tested dozens of tools and found this works best for users in your financial range."
       },
-      '4': {
+      '7': {
+        title: "Why are we showing these recommendations?",
+        content: "These are carefully selected products that can help you achieve your financial goals faster. Each recommendation is based on your specific situation and goals, ensuring you get the most relevant and valuable options."
+      },
+      '8': {
         title: "Why are we asking for your email?",
         content: "We want to send you personalized strategies to grow your wealth faster. Based on your net worth and current situation, we'll share specific tips, tools, and opportunities that are most relevant to you. You can unsubscribe anytime, and we'll never spam you."
       }
