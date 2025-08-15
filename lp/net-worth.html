@@ -91,6 +91,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Get Started Free →</button></div>
   </div>
 
+  <div id="step-3-monarch" class="step hidden">
+    <div class="logo"><img src="/assets/MonarchLogo.PNG" alt="Monarch Money Logo"></div>
+    <div class="question" id="monarch-recommendation">🎯 Perfect Match Found!</div>
+    <div class="subtext" id="monarch-subtext">Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.</div>
+    <div class="benefit-text">✓ All-in-one financial management • Beautiful interface • Expert insights</div>
+    <div class="grid-buttons"><button class="option-button" onclick="redirectToMonarch()">Get Started →</button></div>
+  </div>
+
   <div id="step-4" class="step hidden">
     <div class="question">Get Your Personalized Financial Roadmap</div>
     <div class="subtext">We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.</div>
@@ -178,11 +186,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     trackFormEvent('net-worth', '1', 'select', value);
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
+    const lowValue = ['<$10k', '$10k–$50k', '$50k–$100k'];
+    
     if (highValue.includes(value)) { 
       setStepOrder(['1','3','4']); 
       document.getElementById('empower-recommendation').textContent = `🎯 Perfect Match Found!`;
       document.getElementById('empower-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.`;
       goTo('3'); 
+    }
+    else if (lowValue.includes(value)) { 
+      setStepOrder(['1','2','3-monarch','4']); 
+      goTo('2'); 
     }
     else { 
       setStepOrder(['1','2']); 
@@ -195,7 +209,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       trackFormEvent('net-worth', '2', 'select', value);
       trackingMethod = value;
     }
-    if (currentIndex < stepOrder.length - 1) goTo(stepOrder[currentIndex + 1]); 
+    if (currentIndex < stepOrder.length - 1) {
+      const nextStepId = stepOrder[currentIndex + 1];
+      if (nextStepId === '3-monarch') {
+        document.getElementById('monarch-recommendation').textContent = `🎯 Perfect Match Found!`;
+        document.getElementById('monarch-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.`;
+      }
+      goTo(nextStepId);
+    }
   }
 
   function goTo(id) { toggle(currentIndex, true); const newIndex = stepOrder.indexOf(id); currentIndex = newIndex === -1 ? currentIndex : newIndex; toggle(currentIndex, false); syncHash(stepOrder[currentIndex]); updateProgress(); }
@@ -245,6 +266,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Build the URL with parameters
     const baseUrl = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1058727&trid=1368848.157618&foc=16&fot=9999&fos=6';
     const url = `${baseUrl}&fobs=${sabeid}&fobs2=${gclid}`;
+    
+    window.open(url, '_blank');
+    document.title = 'Level Up! Add Your Information to Advance';
+    goTo('4');
+  }
+
+  function redirectToMonarch() {
+    trackFormEvent('net-worth', '3-monarch', 'click', 'continue');
+    
+    // Get user ID and gclid
+    const sabeid = getOrCreateUserId();
+    const gclid = getGclid();
+    
+    // Build the URL with parameters for Monarch Money
+    const baseUrl = 'https://www.monarchmoney.com/landing/affiliate-manage-finances';
+    const url = `${baseUrl}?fobs=${sabeid}&fobs2=${gclid}`;
     
     window.open(url, '_blank');
     document.title = 'Level Up! Add Your Information to Advance';
@@ -306,6 +343,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       '3': {
         title: "Why are we recommending Empower?",
         content: "Based on your financial situation, Empower offers the best combination of features, ease of use, and value. It's free forever, syncs with all your accounts automatically, and provides professional-grade insights. We've tested dozens of tools and found this works best for users in your financial range."
+      },
+      '3-monarch': {
+        title: "Why are we recommending Monarch Money?",
+        content: "For users with under $100k net worth, Monarch Money provides the perfect balance of comprehensive features and ease of use. It's designed to help you build better financial habits and grow your wealth systematically. The platform offers beautiful insights and expert guidance tailored to your financial stage."
       },
       '4': {
         title: "Why are we asking for your email?",
