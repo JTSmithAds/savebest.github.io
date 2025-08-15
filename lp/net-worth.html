@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Net Worth Wizard</title>
+  <title>Free Net Worth Calculator - Track Your Wealth in 60 Seconds | SaveBest.org</title>
   <style>
     body { font-family: 'Helvetica Neue', sans-serif; background-color: #ffffff; margin: 0; padding: 0; color: #333; }
     .wizard-container { max-width: 480px; margin: 0 auto; padding: 2rem 1rem; background-color: #ffffff; text-align: center; }
@@ -21,6 +21,15 @@
     .nav-links a { color: #888; text-decoration: none; cursor: pointer; }
     .hidden { display: none; }
     .email-input { padding: 0.8rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 1rem; width: 100%; }
+    .fine-print { font-size: 0.75rem; color: #888; margin-top: 2rem; padding: 1rem; background-color: #f8f8f8; border-radius: 8px; line-height: 1.4; }
+    .benefit-text { font-size: 0.9rem; color: #3f6b5d; font-weight: 500; margin-bottom: 1rem; }
+    .urgency-text { font-size: 0.85rem; color: #d32f2f; font-weight: 500; margin-bottom: 1rem; }
+    .help-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; max-width: 400px; display: none; }
+    .help-tooltip h3 { margin: 0 0 1rem 0; color: #3f6b5d; font-size: 1.1rem; }
+    .help-tooltip p { margin: 0 0 1rem 0; line-height: 1.5; color: #555; }
+    .help-tooltip .close-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+    .help-tooltip .close-btn:hover { color: #333; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
   </style>
 </head>
 <body>
@@ -32,7 +41,7 @@
     <div class="progress-label" id="progress-text"></div>
     <div class="nav-links">
       <a onclick="goPrev()" id="previous-link" class="hidden">Previous</a>
-      <a href="#">Help</a>
+      <a onclick="showHelp()" style="cursor: pointer;">Help</a>
       <a href="#">Exit</a>
     </div>
   </div>
@@ -40,8 +49,8 @@
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
   <div id="step-1" class="step">
-    <div class="question">How much liquid net worth do you have? That's cash, bank accounts, stocks, and retirement</div>
-    <div class="subtext">A quick guess is fine, this just helps us know which tools will help you the best.</div>
+    <div class="question">What's your current liquid net worth?</div>
+    <div class="subtext">This includes cash, savings, investments, and retirement accounts. We'll use this to recommend the best free tools for your financial situation.</div>
     <div class="grid-buttons">
       <button class="option-button" onclick="selectAssets('<$10k')">&lt;$10k</button>
       <button class="option-button" onclick="selectAssets('$10k–$50k')">$10k–$50k</button>
@@ -53,26 +62,45 @@
   </div>
 
   <div id="step-2" class="step hidden">
-    <div class="question">How are you currently tracking your net worth?</div>
+    <div class="question">How do you currently track your finances?</div>
+    <div class="subtext">This helps us recommend the right solution for your needs and experience level.</div>
     <div class="grid-buttons">
-      <button class="option-button" onclick="nextStep('Spreadsheet')">Spreadsheet</button>
-      <button class="option-button" onclick="nextStep('Free Software')">Free Software</button>
+      <button class="option-button" onclick="nextStep('Spreadsheet')">Excel/Google Sheets</button>
+      <button class="option-button" onclick="nextStep('Free Software')">Free App (Mint, etc.)</button>
       <button class="option-button" onclick="nextStep('Paid Software')">Paid Software</button>
-      <button class="option-button" onclick="nextStep('I don\'t track my net worth')">I don't track my net worth</button>
+      <button class="option-button" onclick="nextStep('I don\'t track my net worth')">I don't track anything</button>
     </div>
   </div>
 
   <div id="step-3" class="step hidden">
     <div class="logo"><img src="/assets/empower-logo.svg" alt="Empower Logo"></div>
-    <div class="question" id="empower-recommendation">We Rank Empower's Free Net Worth Tracker #1 for users with $X in liquid net worth.</div>
-    <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Continue</button></div>
+    <div class="question" id="empower-recommendation">🎯 Perfect Match Found!</div>
+    <div class="subtext" id="empower-subtext">Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.</div>
+    <div class="benefit-text">✓ Free forever • Syncs all accounts • Professional-grade insights</div>
+    <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Get Started Free →</button></div>
   </div>
 
   <div id="step-4" class="step hidden">
-    <div class="question">We'll update you with new powerful ways to level up your finances</div>
-    <input type="email" placeholder="Enter your email" class="email-input">
-    <div class="grid-buttons"><button class="submit-button" onclick="submitEmail()">Submit</button></div>
+    <div class="question">Get Your Personalized Financial Roadmap</div>
+    <div class="subtext">We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.</div>
+    <div class="benefit-text">✓ Weekly wealth-building tips • Exclusive tool access • No spam, unsubscribe anytime</div>
+    <input type="email" placeholder="Enter your email address" class="email-input">
+    <div class="grid-buttons"><button class="submit-button" onclick="submitEmail()">Get My Free Roadmap →</button></div>
   </div>
+
+  <div class="fine-print">
+    <strong>Disclosure:</strong> Most of the companies mentioned on this site compensate us in some way, whether an affiliate or direct relationship. This helps us keep our tools free. We only recommend products we genuinely believe will help you.
+  </div>
+</div>
+
+<!-- Help Tooltip Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Help Tooltip -->
+<div class="help-tooltip" id="help-tooltip">
+  <button class="close-btn" onclick="closeHelp()">&times;</button>
+  <h3 id="help-title">Why are we asking this?</h3>
+  <p id="help-content">Help content will appear here.</p>
 </div>
 
 <script>
@@ -114,8 +142,16 @@
     trackFormEvent('net-worth', '1', 'select', value);
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
-    if (highValue.includes(value)) { setStepOrder(['1','3','4']); document.getElementById('empower-recommendation').textContent = `We Rank Empower's Free Net Worth Tracker #1 for users with ${assetRange} in liquid net worth.`; goTo('3'); }
-    else { setStepOrder(['1','2']); goTo('2'); }
+    if (highValue.includes(value)) { 
+      setStepOrder(['1','3','4']); 
+      document.getElementById('empower-recommendation').textContent = `🎯 Perfect Match Found!`;
+      document.getElementById('empower-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.`;
+      goTo('3'); 
+    }
+    else { 
+      setStepOrder(['1','2']); 
+      goTo('2'); 
+    }
   }
 
   function nextStep(value) { 
@@ -179,6 +215,51 @@
   }
 
   function syncHash(stepId) { const desired = `#${stepId}`; if (location.hash !== desired) location.hash = desired; }
+
+  // Help tooltip functionality
+  function showHelp() {
+    const helpContent = getHelpContent();
+    document.getElementById('help-title').textContent = helpContent.title;
+    document.getElementById('help-content').textContent = helpContent.content;
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('help-tooltip').style.display = 'block';
+  }
+
+  function closeHelp() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('help-tooltip').style.display = 'none';
+  }
+
+  function getHelpContent() {
+    const currentStep = stepOrder[currentIndex];
+    const helpData = {
+      '1': {
+        title: "Why are we asking about your net worth?",
+        content: "Your liquid net worth helps us recommend the most suitable financial tools for your situation. Different wealth levels have different needs - someone with $10k needs different advice than someone with $500k. This ensures you get personalized recommendations that actually work for your financial stage."
+      },
+      '2': {
+        title: "Why are we asking about your current tracking method?",
+        content: "Understanding how you currently manage your finances helps us recommend the right solution. If you're using spreadsheets, you might need something more automated. If you're already using apps, we can suggest upgrades. If you're not tracking at all, we'll start with the basics."
+      },
+      '3': {
+        title: "Why are we recommending Empower?",
+        content: "Based on your financial situation, Empower offers the best combination of features, ease of use, and value. It's free forever, syncs with all your accounts automatically, and provides professional-grade insights. We've tested dozens of tools and found this works best for users in your financial range."
+      },
+      '4': {
+        title: "Why are we asking for your email?",
+        content: "We want to send you personalized strategies to grow your wealth faster. Based on your net worth and current situation, we'll share specific tips, tools, and opportunities that are most relevant to you. You can unsubscribe anytime, and we'll never spam you."
+      }
+    };
+    return helpData[currentStep] || {
+      title: "Help",
+      content: "This is the help section for the current step."
+    };
+  }
+
+  // Close tooltip when clicking overlay
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('overlay').addEventListener('click', closeHelp);
+  });
 
   window.addEventListener('hashchange', () => {
     const id = location.hash.replace('#','');
