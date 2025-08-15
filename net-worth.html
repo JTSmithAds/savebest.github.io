@@ -58,7 +58,7 @@
       <button class="option-button" onclick="nextStep('Spreadsheet')">Spreadsheet</button>
       <button class="option-button" onclick="nextStep('Free Software')">Free Software</button>
       <button class="option-button" onclick="nextStep('Paid Software')">Paid Software</button>
-      <button class="option-button" onclick="nextStep(\"I don't track my net worth\")">I don't track my net worth</button>
+      <button class="option-button" onclick="nextStep('I don\'t track my net worth')">I don't track my net worth</button>
     </div>
   </div>
 
@@ -71,7 +71,7 @@
   <div id="step-4" class="step hidden">
     <div class="question">We'll update you with new powerful ways to level up your finances</div>
     <input type="email" placeholder="Enter your email" class="email-input">
-    <div class="grid-buttons"><button class="submit-button">Submit</button></div>
+    <div class="grid-buttons"><button class="submit-button" onclick="submitEmail()">Submit</button></div>
   </div>
 </div>
 
@@ -83,14 +83,48 @@
 
   function setStepOrder(order) { stepOrder = order; currentIndex = 0; syncHash(stepOrder[currentIndex]); updateProgress(); }
 
+  function trackFormEvent(page, step, action, value) {
+    const eventName = `form_${page}_${step}_${action}_${value}`;
+    
+    // Google Analytics 4
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_interaction', {
+        'event_category': 'lead_form',
+        'event_label': eventName,
+        'form_page': page,
+        'form_step': step,
+        'form_action': action,
+        'form_value': value
+      });
+    }
+    
+    // Facebook Pixel
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', {
+        content_name: eventName,
+        content_category: 'form_interaction'
+      });
+    }
+    
+    // Console logging for development
+    console.log('Form Event:', eventName);
+  }
+
   function selectAssets(value) {
+    trackFormEvent('net-worth', '1', 'select', value);
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
     if (highValue.includes(value)) { setStepOrder(['1','3','4']); document.getElementById('empower-recommendation').textContent = `We Rank Empower's Free Net Worth Tracker #1 for users with ${assetRange} in liquid net worth.`; goTo('3'); }
     else { setStepOrder(['1','2']); goTo('2'); }
   }
 
-  function nextStep(value) { trackingMethod = value || trackingMethod; if (currentIndex < stepOrder.length - 1) goTo(stepOrder[currentIndex + 1]); }
+  function nextStep(value) { 
+    if (value) {
+      trackFormEvent('net-worth', '2', 'select', value);
+      trackingMethod = value;
+    }
+    if (currentIndex < stepOrder.length - 1) goTo(stepOrder[currentIndex + 1]); 
+  }
 
   function goTo(id) { toggle(currentIndex, true); const newIndex = stepOrder.indexOf(id); currentIndex = newIndex === -1 ? currentIndex : newIndex; toggle(currentIndex, false); syncHash(stepOrder[currentIndex]); updateProgress(); }
 
@@ -104,15 +138,44 @@
     document.getElementById('progress-fill').style.width = `${(at / Math.max(total,3)) * 100}%`;
     const prevLink = document.getElementById('previous-link');
     if (currentIndex > 0) prevLink.classList.remove('hidden'); else prevLink.classList.add('hidden');
+    
+    // Track progress updates
+    trackFormEvent('net-worth', 'progress', 'update', `${at}/${total}`);
   }
 
   function redirectToEmpower() {
+    trackFormEvent('net-worth', '3', 'click', 'continue');
     let url = '';
     if (!trackingMethod || trackingMethod === "I don't track my net worth") url = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1223670&trid=1368848.157618&foc=16&fot=9999&fos=6';
     else url = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1129096&trid=1368848.157618&foc=16&fot=9999&fos=6';
     window.open(url, '_blank');
     document.title = 'Level Up! Add Your Information to Advance';
     goTo('4');
+  }
+
+  function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function submitEmail() {
+    const emailInput = document.querySelector('.email-input');
+    const email = emailInput.value.trim();
+    
+    if (isValidEmail(email)) {
+      trackFormEvent('net-worth', '4', 'submit', email);
+      // Store user preferences
+      localStorage.setItem('savebest_user_preferences', JSON.stringify({
+        asset_range: assetRange,
+        tracking_method: trackingMethod,
+        email: email
+      }));
+      // Here you would typically send the data to your backend
+      alert('Thank you! We\'ll be in touch soon.');
+    } else {
+      trackFormEvent('net-worth', '4', 'invalid_email', email);
+      alert('Please enter a valid email address.');
+    }
   }
 
   function syncHash(stepId) { const desired = `#${stepId}`; if (location.hash !== desired) location.hash = desired; }

@@ -1,0 +1,21 @@
+# Local development files (don't push to GitHub)
+dev-server.bat
+start-dev.ps1
+local-instructions.md
+development-notes.txt
+lead-form-tracking-standard.md
+tracking-quick-reference.md
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log

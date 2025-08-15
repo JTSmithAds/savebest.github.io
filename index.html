@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaveBest.org - Find the Perfect Balance of Quality & Savings</title>
+  <style>
+    body { 
+      font-family: 'Helvetica Neue', sans-serif; 
+      background-color: #ffffff; 
+      margin: 0; 
+      padding: 0; 
+      color: #333; 
+      line-height: 1.6;
+    }
+    
+    .header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e6e6e6;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo img { 
+      max-width: 180px; 
+      height: auto; 
+    }
+    
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .nav-item {
+      position: relative;
+    }
+    
+    .nav-link {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.2s;
+    }
+    
+    .nav-link:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      min-width: 200px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      z-index: 1;
+      top: 100%;
+      left: 0;
+      margin-top: 0.5rem;
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    .dropdown-content a {
+      color: #333;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      display: block;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.2s;
+    }
+    
+    .dropdown-content a:last-child {
+      border-bottom: none;
+    }
+    
+    .dropdown-content a:hover {
+      background-color: #f8f8f8;
+    }
+    
+    .main-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    
+    .hero-section {
+      margin-bottom: 4rem;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      background-color: #3f6b5d;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: background-color 0.2s;
+      margin: 0 0.5rem;
+    }
+    
+    .cta-button:hover {
+      background-color: #2d4f43;
+    }
+    
+    .secondary-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      background-color: #f5f5f5;
+      color: #333;
+      text-decoration: none;
+      border: 2px solid #ddd;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: background-color 0.2s, border-color 0.2s;
+      margin: 0 0.5rem;
+    }
+    
+    .secondary-button:hover {
+      background-color: #e0e0e0;
+      border-color: #3f6b5d;
+    }
+    
+    .content-section {
+      text-align: left;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .section-content {
+      font-size: 1.1rem;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    
+    .feature-card {
+      background-color: #f8f8f8;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .feature-description {
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .footer {
+      background-color: #f8f8f8;
+      padding: 2rem 0;
+      margin-top: 4rem;
+      text-align: center;
+      color: #666;
+    }
+    
+    @media (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-menu {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .main-container {
+        padding: 2rem 1rem;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="nav-container">
+    <div class="logo">
+      <img src="/assets/logo.png" alt="SaveBest.org Logo">
+    </div>
+    
+    <nav class="nav-menu">
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link">Financial Tools ▼</a>
+        <div class="dropdown-content">
+          <a href="/net-worth.html">Net Worth Tracker</a>
+          <a href="#">Budget Planner</a>
+          <a href="#">Investment Calculator</a>
+          <a href="#">Debt Payoff Tracker</a>
+        </div>
+      </div>
+      
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link">Savings Guides ▼</a>
+        <div class="dropdown-content">
+          <a href="#">Emergency Fund</a>
+          <a href="#">Retirement Planning</a>
+          <a href="#">Tax Optimization</a>
+          <a href="#">Insurance Strategies</a>
+        </div>
+      </div>
+      
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link">Product Reviews ▼</a>
+        <div class="dropdown-content">
+          <a href="#">Best Credit Cards</a>
+          <a href="#">High-Yield Savings</a>
+          <a href="#">Investment Platforms</a>
+          <a href="#">Budgeting Apps</a>
+        </div>
+      </div>
+      
+      <a href="#" class="nav-link">About</a>
+      <a href="#" class="nav-link">Contact</a>
+    </nav>
+  </div>
+</div>
+
+<div class="main-container">
+  <div class="hero-section">
+    <h1 class="hero-title">Find the Perfect Balance of Quality & Savings</h1>
+    <p class="hero-subtitle">
+      We help you discover the sweet spot where exceptional quality meets maximum value. 
+      Stop choosing between the best and the cheapest – get both.
+    </p>
+    <div>
+      <a href="/net-worth.html" class="cta-button">Start Your Net Worth Journey</a>
+      <a href="#" class="secondary-button">Learn More</a>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2 class="section-title">Our Mission</h2>
+    <p class="section-content">
+      At SaveBest.org, we believe you shouldn't have to compromise between quality and savings. 
+      Our mission is to help you find that perfect intersection where you get the best possible 
+      products and services while maximizing your financial efficiency.
+    </p>
+    
+    <p class="section-content">
+      We understand that true financial wisdom isn't about always choosing the cheapest option 
+      or always splurging on the most expensive. It's about making informed decisions that 
+      balance immediate value with long-term benefits, quality with cost, and convenience with savings.
+    </p>
+  </div>
+
+  <div class="content-section">
+    <h2 class="section-title">Master the Art of Smart Saving</h2>
+    <p class="section-content">
+      Financial success isn't just about earning more – it's about optimizing every dollar you spend. 
+      We teach you how to use the right financial tools and strategies to build wealth while 
+      maintaining the quality of life you deserve.
+    </p>
+    
+    <p class="section-content">
+      From tracking your net worth to optimizing your investment strategy, from finding the best 
+      credit card rewards to building an emergency fund, we provide the knowledge and tools you 
+      need to make every financial decision count.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3 class="feature-title">Net Worth Tracking</h3>
+      <p class="feature-description">
+        Monitor your financial progress with our free net worth tracker. 
+        See your wealth grow over time and identify areas for improvement.
+      </p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3 class="feature-title">Smart Recommendations</h3>
+      <p class="feature-description">
+        Get personalized recommendations for financial products and services 
+        that match your specific needs and goals.
+      </p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3 class="feature-title">Educational Resources</h3>
+      <p class="feature-description">
+        Learn proven strategies for saving money, investing wisely, and 
+        building long-term wealth through our comprehensive guides.
+      </p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3 class="feature-title">Quick Tools</h3>
+      <p class="feature-description">
+        Access calculators, planners, and trackers to optimize your 
+        financial decisions and accelerate your wealth-building journey.
+      </p>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2 class="section-title">Why Choose SaveBest.org?</h2>
+    <p class="section-content">
+      We're not just another financial advice website. We're your partners in building a 
+      financially secure future. Our approach combines data-driven analysis with practical 
+      wisdom to help you make decisions that serve both your immediate needs and long-term goals.
+    </p>
+    
+    <p class="section-content">
+      Whether you're just starting your financial journey or you're a seasoned investor 
+      looking to optimize your strategy, we provide the tools, knowledge, and guidance 
+      you need to achieve the perfect balance of quality and savings in every aspect of your financial life.
+    </p>
+  </div>
+
+  <div style="text-align: center; margin-top: 3rem;">
+    <a href="/net-worth.html" class="cta-button">Start Your Financial Journey Today</a>
+  </div>
+</div>
+
+<div class="footer">
+  <p>&copy; 2024 SaveBest.org. All rights reserved. | <a href="#" style="color: #3f6b5d;">Privacy Policy</a> | <a href="#" style="color: #3f6b5d;">Terms of Service</a></p>
+</div>
+
+</body>
+</html>
