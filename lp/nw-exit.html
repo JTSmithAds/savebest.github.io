@@ -269,6 +269,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const urlParams = new URLSearchParams(window.location.search);
     let gclid = urlParams.get('gclid');
     
+    // If gclid found in URL, save it as a 90-day cookie
+    if (gclid) {
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 90);
+      document.cookie = `gclid=${gclid}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax`;
+    }
+    
     // If not in URL, check cookies
     if (!gclid) {
       const cookies = document.cookie.split(';');
