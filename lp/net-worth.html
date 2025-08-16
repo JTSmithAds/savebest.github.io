@@ -60,8 +60,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
   <div id="step-1" class="step">
+    <div class="question">How do you currently track your finances?</div>
+    <div class="subtext">This helps us recommend the right solution for your needs and experience level.</div>
+    <div class="grid-buttons">
+      <button class="option-button" onclick="nextStep('Spreadsheet')">Excel/Google Sheets</button>
+             <button class="option-button" onclick="nextStep('Free Software')">Free Software</button>
+      <button class="option-button" onclick="nextStep('Paid Software')">Paid Software</button>
+      <button class="option-button" onclick="nextStep('I don\'t track my net worth')">I don't track anything</button>
+    </div>
+  </div>
+
+  <div id="step-2" class="step hidden">
     <div class="question">What's your current liquid net worth?</div>
-    <div class="subtext">This includes cash, savings, investments, and retirement accounts. We'll use this to recommend the best free tools for your financial situation.</div>
+    <div class="subtext">Estimate your current liquid net worth (a guess is fine). Liquid means cash, savings, investments, and retirement accounts.</div>
     <div class="grid-buttons">
       <button class="option-button" onclick="selectAssets('<$10k')">&lt;$10k</button>
       <button class="option-button" onclick="selectAssets('$10k–$50k')">$10k–$50k</button>
@@ -69,17 +80,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="option-button" onclick="selectAssets('$100k–$500k')">$100k–$500k</button>
       <button class="option-button" onclick="selectAssets('$500k–$1m')">$500k–$1m</button>
       <button class="option-button" onclick="selectAssets('$1m+')">$1m+</button>
-    </div>
-  </div>
-
-  <div id="step-2" class="step hidden">
-    <div class="question">How do you currently track your finances?</div>
-    <div class="subtext">This helps us recommend the right solution for your needs and experience level.</div>
-    <div class="grid-buttons">
-      <button class="option-button" onclick="nextStep('Spreadsheet')">Excel/Google Sheets</button>
-      <button class="option-button" onclick="nextStep('Free Software')">Free App (Mint, etc.)</button>
-      <button class="option-button" onclick="nextStep('Paid Software')">Paid Software</button>
-      <button class="option-button" onclick="nextStep('I don\'t track my net worth')">I don't track anything</button>
     </div>
   </div>
 
@@ -174,7 +174,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   let stepOrder = ['1'];
   let currentIndex = 0;
 
-  function setStepOrder(order) { stepOrder = order; currentIndex = 0; syncHash(stepOrder[currentIndex]); updateProgress(); }
+  function setStepOrder(order) { 
+    stepOrder = order; 
+    updateProgress(); 
+  }
 
   function trackFormEvent(page, step, action, value) {
     const eventName = `form_${page}_${step}_${action}_${value}`;
@@ -208,40 +211,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }
 
+  function nextStep(value) { 
+    if (value) {
+      trackFormEvent('net-worth', '1', 'select', value);
+      trackingMethod = value;
+    }
+    setStepOrder(['1','2']);
+    goTo('2');
+  }
+
   function selectAssets(value) {
-    trackFormEvent('net-worth', '1', 'select', value);
+    trackFormEvent('net-worth', '2', 'select', value);
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
     const lowValue = ['<$10k', '$10k–$50k', '$50k–$100k'];
     
     if (highValue.includes(value)) { 
-      setStepOrder(['1','3','4']); 
       document.getElementById('empower-recommendation').textContent = `🎯 Perfect Match Found!`;
       document.getElementById('empower-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.`;
+      setStepOrder(['1','2','3','4']); 
       goTo('3'); 
     }
     else if (lowValue.includes(value)) { 
+      document.getElementById('monarch-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.`;
       setStepOrder(['1','2','3-monarch','4']); 
-      goTo('2'); 
+      goTo('3-monarch'); 
     }
     else { 
       setStepOrder(['1','2']); 
       goTo('2'); 
-    }
-  }
-
-  function nextStep(value) { 
-    if (value) {
-      trackFormEvent('net-worth', '2', 'select', value);
-      trackingMethod = value;
-    }
-    if (currentIndex < stepOrder.length - 1) {
-      const nextStepId = stepOrder[currentIndex + 1];
-      if (nextStepId === '3-monarch') {
-        document.getElementById('monarch-recommendation').textContent = `🎯 Perfect Match Found!`;
-        document.getElementById('monarch-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.`;
-      }
-      goTo(nextStepId);
     }
   }
 
@@ -449,12 +447,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const currentStep = stepOrder[currentIndex];
     const helpData = {
       '1': {
-        title: "Why are we asking about your net worth?",
-        content: "Your liquid net worth helps us recommend the most suitable financial tools for your situation. Different wealth levels have different needs - someone with $10k needs different advice than someone with $500k. This ensures you get personalized recommendations that actually work for your financial stage."
-      },
-      '2': {
         title: "Why are we asking about your current tracking method?",
         content: "Understanding how you currently manage your finances helps us recommend the right solution. If you're using spreadsheets, you might need something more automated. If you're already using apps, we can suggest upgrades. If you're not tracking at all, we'll start with the basics."
+      },
+      '2': {
+        title: "Why are we asking about your net worth?",
+        content: "Your liquid net worth helps us recommend the most suitable financial tools for your situation. Different wealth levels have different needs - someone with $10k needs different advice than someone with $500k. This ensures you get personalized recommendations that actually work for your financial stage."
       },
       '3': {
         title: "Why are we recommending Empower?",
