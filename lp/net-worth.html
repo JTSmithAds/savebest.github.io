@@ -146,6 +146,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   document.addEventListener('DOMContentLoaded', function() {
     const userId = getOrCreateUserId();
     console.log('User ID:', userId);
+    
+    // Track page load event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'page_view',
+        'page_title': 'Net Worth Calculator',
+        'page_location': window.location.href,
+        'user_id': userId
+      });
+    }
   });
   
   let trackingMethod = '';
@@ -158,28 +168,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function trackFormEvent(page, step, action, value) {
     const eventName = `form_${page}_${step}_${action}_${value}`;
     
-    // Google Analytics 4
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'form_interaction', {
+    // Google Tag Manager - Push to dataLayer
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'form_interaction',
         'event_category': 'lead_form',
         'event_label': eventName,
         'form_page': page,
         'form_step': step,
         'form_action': action,
-        'form_value': value
-      });
-    }
-    
-    // Facebook Pixel
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'Lead', {
-        content_name: eventName,
-        content_category: 'form_interaction'
+        'form_value': value,
+        'user_id': getOrCreateUserId(),
+        'asset_range': assetRange,
+        'tracking_method': trackingMethod
       });
     }
     
     // Console logging for development
     console.log('Form Event:', eventName);
+    console.log('DataLayer Event:', {
+      'event': 'form_interaction',
+      'event_category': 'lead_form',
+      'event_label': eventName,
+      'form_page': page,
+      'form_step': step,
+      'form_action': action,
+      'form_value': value
+    });
   }
 
   function selectAssets(value) {
@@ -259,6 +274,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function redirectToEmpower() {
     trackFormEvent('net-worth', '3', 'click', 'continue');
     
+    // Track the redirect event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'redirect_click',
+        'redirect_destination': 'empower',
+        'user_id': getOrCreateUserId(),
+        'asset_range': assetRange,
+        'tracking_method': trackingMethod
+      });
+    }
+    
     // Get user ID and gclid
     const sabeid = getOrCreateUserId();
     const gclid = getGclid();
@@ -274,6 +300,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function redirectToMonarch() {
     trackFormEvent('net-worth', '3-monarch', 'click', 'continue');
+    
+    // Track the redirect event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'redirect_click',
+        'redirect_destination': 'monarch',
+        'user_id': getOrCreateUserId(),
+        'asset_range': assetRange,
+        'tracking_method': trackingMethod
+      });
+    }
     
     // Get user ID and gclid
     const sabeid = getOrCreateUserId();
@@ -299,6 +336,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     if (isValidEmail(email)) {
       trackFormEvent('net-worth', '4', 'submit', email);
+      
+      // Track email submission event
+      if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+          'event': 'email_submit',
+          'email_provided': 'yes',
+          'user_id': getOrCreateUserId(),
+          'asset_range': assetRange,
+          'tracking_method': trackingMethod
+        });
+      }
+      
       // Store user preferences
       localStorage.setItem('savebest_user_preferences', JSON.stringify({
         asset_range: assetRange,
@@ -309,6 +358,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       alert('Thank you! We\'ll be in touch soon.');
     } else {
       trackFormEvent('net-worth', '4', 'invalid_email', email);
+      
+      // Track invalid email event
+      if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+          'event': 'email_submit',
+          'email_provided': 'no',
+          'email_error': 'invalid_format',
+          'user_id': getOrCreateUserId(),
+          'asset_range': assetRange,
+          'tracking_method': trackingMethod
+        });
+      }
+      
       alert('Please enter a valid email address.');
     }
   }
