@@ -30,6 +30,10 @@ savebest.github.io/
 
 Visit [SaveBest.org](https://savebest.org) to explore our tools and resources.
 
+## 🤝 Contributing
+
+This is a static, front‑end only site (no backend services, webhooks, or secrets). See `CONTRIBUTING.md` for guidelines.
+
 ## 📝 License
 
 © 2024 SaveBest.org. All rights reserved.
