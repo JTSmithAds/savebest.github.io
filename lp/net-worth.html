@@ -53,7 +53,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nav-links">
       <a onclick="goPrev()" id="previous-link" class="hidden">Previous</a>
       <a onclick="showHelp()" style="cursor: pointer;">Help</a>
-      <a href="#">Exit</a>
+      <a onclick="showExitConfirm()" style="cursor: pointer;">Exit</a>
     </div>
   </div>
 
@@ -101,7 +101,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="step-4" class="step hidden">
     <div class="question">Get Your Personalized Financial Roadmap</div>
-    <div class="subtext">We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.</div>
+    <div class="subtext" id="step4-subtext">We'll send you custom strategies to grow your net worth faster, plus exclusive access to our best money-saving tools.</div>
     <div class="benefit-text">✓ Weekly wealth-building tips • Exclusive tool access • No spam, unsubscribe anytime</div>
     <input type="email" placeholder="Enter your email address" class="email-input">
     <div class="grid-buttons"><button class="submit-button" onclick="submitEmail()">Get My Free Roadmap →</button></div>
@@ -120,6 +120,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <button class="close-btn" onclick="closeHelp()">&times;</button>
   <h3 id="help-title">Why are we asking this?</h3>
   <p id="help-content">Help content will appear here.</p>
+</div>
+
+<!-- Exit Confirmation Modal -->
+<div class="help-tooltip" id="exit-confirm-modal">
+  <button class="close-btn" onclick="closeExitConfirm()">&times;</button>
+  <h3>Are you sure?</h3>
+  <p>You're only a couple clicks away from setting up your net worth tracker!</p>
+  <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+    <button class="option-button" onclick="closeExitConfirm()" style="flex: 1; background-color: #f5f5f5; border: 2px solid #ddd;">Back to Form</button>
+    <button class="option-button" onclick="exitForm()" style="flex: 1; background-color: #3f6b5d; color: white; border: 2px solid #3f6b5d;">Exit</button>
+  </div>
 </div>
 
 <script>
@@ -234,7 +245,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  function goTo(id) { toggle(currentIndex, true); const newIndex = stepOrder.indexOf(id); currentIndex = newIndex === -1 ? currentIndex : newIndex; toggle(currentIndex, false); syncHash(stepOrder[currentIndex]); updateProgress(); }
+  function goTo(id) { 
+    toggle(currentIndex, true); 
+    const newIndex = stepOrder.indexOf(id); 
+    currentIndex = newIndex === -1 ? currentIndex : newIndex; 
+    toggle(currentIndex, false); 
+    syncHash(stepOrder[currentIndex]); 
+    updateProgress(); 
+    
+    // Update step 4 text with asset range if available
+    if (id === '4' && assetRange) {
+      const step4Subtext = document.getElementById('step4-subtext');
+      if (step4Subtext) {
+        step4Subtext.textContent = `We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.`;
+      }
+    }
+  }
 
   function goPrev() { if (currentIndex === 0) return; history.back(); }
 
@@ -391,6 +417,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.getElementById('help-tooltip').style.display = 'none';
   }
 
+  function showExitConfirm() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('exit-confirm-modal').style.display = 'block';
+  }
+
+  function closeExitConfirm() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('exit-confirm-modal').style.display = 'none';
+  }
+
+  function exitForm() {
+    // Track exit event
+    trackFormEvent('net-worth', 'exit', 'confirm', 'user_exit');
+    
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'form_exit',
+        'exit_reason': 'user_confirmed',
+        'user_id': getOrCreateUserId(),
+        'asset_range': assetRange,
+        'tracking_method': trackingMethod
+      });
+    }
+    
+    // Redirect to exit page with financial tool options
+    window.location.href = '/lp/nw-exit.html';
+  }
+
   function getHelpContent() {
     const currentStep = stepOrder[currentIndex];
     const helpData = {
@@ -423,7 +477,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // Close tooltip when clicking overlay
   document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('overlay').addEventListener('click', closeHelp);
+    document.getElementById('overlay').addEventListener('click', function() {
+      closeHelp();
+      closeExitConfirm();
+    });
   });
 
   window.addEventListener('hashchange', () => {
