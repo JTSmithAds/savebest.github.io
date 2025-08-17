@@ -13,16 +13,76 @@
   <title>Free Net Worth Calculator - Track Your Wealth in 60 Seconds | SaveBest.org</title>
   <style>
     body { font-family: 'Helvetica Neue', sans-serif; background-color: #ffffff; margin: 0; padding: 0; color: #333; }
-    .wizard-container { max-width: 480px; margin: 0 auto; padding: 2rem 1rem; background-color: #ffffff; text-align: center; }
+    .wizard-container { max-width: 480px; margin: 0 auto; padding: 2rem 1rem; background-color: #f8f9fa; text-align: center; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
     .logo img { max-width: 220px; height: auto; margin-bottom: 1.5rem; }
     .progress-bar { background-color: #e6e6e6; border-radius: 5px; overflow: hidden; height: 6px; margin-bottom: 1rem; }
     .progress-fill { background-color: #3f6b5d; width: 33.333%; height: 100%; transition: width 0.3s ease; }
+    
+    /* Calculator Display */
+    .calculator-display { 
+      background: linear-gradient(145deg, #2c3e50, #34495e); 
+      color: #00ff00; 
+      font-family: 'Courier New', monospace; 
+      font-size: 1.2rem; 
+      font-weight: bold; 
+      padding: 1rem; 
+      border-radius: 8px; 
+      margin-bottom: 1.5rem; 
+      text-align: right; 
+      min-height: 3rem; 
+      display: flex; 
+      align-items: center; 
+      justify-content: flex-end; 
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3); 
+      border: 2px solid #1a252f; 
+    }
+    .calculator-display.empty { 
+      color: #4a5f6b; 
+      font-style: italic; 
+    }
+    .calculator-display .result { 
+      font-size: 1.4rem; 
+      color: #00ff00; 
+      text-shadow: 0 0 5px rgba(0,255,0,0.5); 
+      animation: glow 2s ease-in-out infinite alternate; 
+    }
+    
+    @keyframes glow {
+      from { text-shadow: 0 0 5px rgba(0,255,0,0.5); }
+      to { text-shadow: 0 0 10px rgba(0,255,0,0.8), 0 0 20px rgba(0,255,0,0.6); }
+    }
+    
+    /* Button press animation */
+    .button-press { 
+      animation: buttonPress 0.1s ease-in-out; 
+    }
+    
+    @keyframes buttonPress { 
+      0% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
     .progress-label { text-align: center; font-size: 0.9rem; color: #3f6b5d; margin-bottom: 1rem; height: 0; overflow: hidden; }
     .question { font-size: 1.4rem; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
     .subtext { font-size: 0.95rem; color: #666; margin-bottom: 1.25rem; }
     .grid-buttons { display: flex; flex-direction: column; gap: 0.75rem; }
-    .option-button, .submit-button { padding: 1rem; font-size: 1rem; background-color: #f5f5f5; color: #333; border: 2px solid #ddd; border-radius: 30px; cursor: pointer; font-weight: bold; transition: background-color 0.2s, border-color 0.2s; }
-    .option-button:hover, .submit-button:hover { background-color: #e0e0e0; border-color: #3f6b5d; }
+    
+    /* Calculator-style button grid for step 2 */
+    .calculator-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 0.75rem; 
+      margin-bottom: 1rem; 
+    }
+    
+    @media (max-width: 480px) {
+      .calculator-grid { 
+        grid-template-columns: 1fr; 
+      }
+    }
+    .option-button, .submit-button { padding: 1rem; font-size: 1rem; background: linear-gradient(145deg, #ffffff, #e6e6e6); color: #333; border: 2px solid #ddd; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .option-button:hover, .submit-button:hover { background: linear-gradient(145deg, #e0e0e0, #d0d0d0); border-color: #3f6b5d; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .option-button:active, .submit-button:active { transform: translateY(0); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
     .top-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 1rem; }
     .nav-links { display: flex; gap: 1rem; }
     .nav-links a { color: #888; text-decoration: none; cursor: pointer; }
@@ -123,6 +183,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
+  <!-- Calculator Display -->
+  <div class="calculator-display empty" id="calculator-display">
+    <span id="display-text">Ready to calculate your net worth...</span>
+  </div>
+
   <div id="step-1" class="step">
     <div class="question">How do you currently track your finances?</div>
     <div class="subtext">This helps us recommend the right solution for your needs and experience level.</div>
@@ -137,7 +202,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="step-2" class="step hidden">
     <div class="question">What's your current liquid net worth?</div>
     <div class="subtext">Estimate your current liquid net worth (a guess is fine). Liquid means cash, savings, investments, and retirement accounts.</div>
-    <div class="grid-buttons">
+    <div class="calculator-grid">
       <button class="option-button" onclick="selectAssets('<$10k')">&lt;$10k</button>
       <button class="option-button" onclick="selectAssets('$10k–$50k')">$10k–$50k</button>
       <button class="option-button" onclick="selectAssets('$50k–$100k')">$50k–$100k</button>
@@ -237,6 +302,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   let assetRange = '';
   let stepOrder = ['1'];
   let currentIndex = 0;
+  
+  // Calculator display functions
+  function updateCalculatorDisplay(text, isResult = false) {
+    const display = document.getElementById('calculator-display');
+    const displayText = document.getElementById('display-text');
+    
+    if (isResult) {
+      display.classList.remove('empty');
+      // Add calculating effect
+      displayText.textContent = 'Calculating...';
+      setTimeout(() => {
+        displayText.innerHTML = `<span class="result">${text}</span>`;
+      }, 800);
+    } else {
+      display.classList.remove('empty');
+      displayText.textContent = text;
+    }
+  }
+  
+  function calculateNetWorthRange(range) {
+    const ranges = {
+      '<$10k': '$0 - $10,000',
+      '$10k–$50k': '$10,000 - $50,000',
+      '$50k–$100k': '$50,000 - $100,000',
+      '$100k–$500k': '$100,000 - $500,000',
+      '$500k–$1m': '$500,000 - $1,000,000',
+      '$1m+': '$1,000,000+'
+    };
+    return ranges[range] || range;
+  }
 
   function setStepOrder(order) { 
     stepOrder = order; 
@@ -279,6 +374,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (value) {
       trackFormEvent('net-worth', '1', 'select', value);
       trackingMethod = value;
+      updateCalculatorDisplay(`Tracking Method: ${value}`, false);
     }
     setStepOrder(['1','2']);
     goTo('2');
@@ -287,6 +383,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function selectAssets(value) {
     trackFormEvent('net-worth', '2', 'select', value);
     assetRange = value;
+    
+    // Update calculator display with net worth range
+    const displayRange = calculateNetWorthRange(value);
+    updateCalculatorDisplay(`Net Worth: ${displayRange}`, true);
+    
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
     const lowValue = ['<$10k', '$10k–$50k', '$50k–$100k'];
     
@@ -549,6 +650,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     document.getElementById('overlay').addEventListener('click', function() {
       closeHelp();
       closeExitConfirm();
+    });
+    
+    // Add button press animations to all option buttons
+    const buttons = document.querySelectorAll('.option-button, .submit-button');
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        this.classList.add('button-press');
+        setTimeout(() => {
+          this.classList.remove('button-press');
+        }, 100);
+      });
     });
   });
 
