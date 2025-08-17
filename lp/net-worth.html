@@ -163,6 +163,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToMonarch()">Get Started →</button></div>
   </div>
 
+  <div id="step-3-pocketsmith" class="step hidden">
+    <div class="logo"><img src="/assets/pocketsmith-logo.svg" alt="Pocketsmith Logo"></div>
+    <div class="question" id="pocketsmith-recommendation">🎯 Perfect Match Found!</div>
+    <div class="subtext" id="pocketsmith-subtext">Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform. It's the ideal solution for users in your financial situation.</div>
+    <div class="benefit-text">✓ Advanced forecasting • Cash flow planning • Goal tracking</div>
+    <div class="grid-buttons"><button class="option-button" onclick="redirectToPocketsmith()">Get Started →</button></div>
+  </div>
+
   <div id="step-4" class="step hidden">
     <div class="question">Get Your Personalized Financial Roadmap</div>
     <div class="subtext" id="step4-subtext">We'll send you custom strategies to grow your net worth faster, plus exclusive access to our best money-saving tools.</div>
@@ -288,13 +296,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     trackFormEvent('net-worth', '2', 'select', value);
     assetRange = value;
     const highValue = ['$100k–$500k', '$500k–$1m', '$1m+'];
-    const lowValue = ['<$10k', '$10k–$50k', '$50k–$100k'];
+    const pocketsmithValue = ['$10k–$50k', '$50k–$100k'];
+    const lowValue = ['<$10k'];
     
     if (highValue.includes(value)) { 
       document.getElementById('empower-recommendation').textContent = `🎯 Perfect Match Found!`;
       document.getElementById('empower-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.`;
       setStepOrder(['1','2','3','4']); 
       goTo('3'); 
+    }
+    else if (pocketsmithValue.includes(value)) { 
+      document.getElementById('pocketsmith-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform. It's the ideal solution for users in your financial situation.`;
+      setStepOrder(['1','2','3-pocketsmith','4']); 
+      goTo('3-pocketsmith'); 
     }
     else if (lowValue.includes(value)) { 
       document.getElementById('monarch-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.`;
@@ -420,6 +434,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     goTo('4');
   }
 
+  function redirectToPocketsmith() {
+    trackFormEvent('net-worth', '3-pocketsmith', 'click', 'continue');
+    
+    // Track the redirect event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'redirect_click',
+        'redirect_destination': 'pocketsmith',
+        'user_id': getOrCreateUserId(),
+        'asset_range': assetRange,
+        'tracking_method': trackingMethod
+      });
+    }
+    
+    // Get user ID and gclid
+    const sabeid = getOrCreateUserId();
+    const gclid = getGclid();
+    
+    // Build the URL with parameters for Pocketsmith (placeholder for now)
+    const baseUrl = 'https://www.pocketsmith.com';
+    const url = `${baseUrl}?fobs=${sabeid}&fobs2=${gclid}`;
+    
+    window.open(url, '_blank');
+    document.title = 'Level Up! Add Your Information to Advance';
+    goTo('4');
+  }
+
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -531,7 +572,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       },
       '3-monarch': {
         title: "Why are we recommending Monarch Money?",
-        content: "For users with under $100k net worth, Monarch Money provides the perfect balance of comprehensive features and ease of use. It's designed to help you build better financial habits and grow your wealth systematically. The platform offers beautiful insights and expert guidance tailored to your financial stage."
+        content: "For users with under $10k net worth, Monarch Money provides the perfect balance of comprehensive features and ease of use. It's designed to help you build better financial habits and grow your wealth systematically. The platform offers beautiful insights and expert guidance tailored to your financial stage."
+      },
+      '3-pocketsmith': {
+        title: "Why are we recommending Pocketsmith?",
+        content: "For users with $10k-$100k net worth, Pocketsmith offers advanced financial forecasting and cash flow planning that's perfect for your wealth-building stage. It helps you project your financial future, plan for major expenses, and track progress toward your goals. The platform's forecasting capabilities are unmatched for users looking to grow their wealth systematically."
       },
       '4': {
         title: "Why are we asking for your email?",
