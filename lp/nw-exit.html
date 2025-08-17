@@ -212,6 +212,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="card-content">
       <div class="card-left">
         <div class="card-logo">
+          <img src="/assets/pocketsmith-logo.svg" alt="Pocketsmith Logo">
+        </div>
+        <div class="card-info">
+          <h3>Pocketsmith</h3>
+          <p>Advanced forecasting • Cash flow planning • Goal tracking</p>
+        </div>
+      </div>
+      <a href="#" class="card-button secondary" onclick="redirectToPocketsmith()">View My Dashboard</a>
+    </div>
+  </div>
+
+  <div class="quote-card">
+    <div class="card-content">
+      <div class="card-left">
+        <div class="card-logo">
           <img src="/assets/MonarchLogo.PNG" alt="Monarch Money Logo">
         </div>
         <div class="card-info">
@@ -308,6 +323,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Build the URL with parameters
     const baseUrl = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1058727&trid=1368848.157618&foc=16&fot=9999&fos=6';
     const url = `${baseUrl}&fobs=${sabeid}&fobs2=${gclid}`;
+    
+    window.open(url, '_blank');
+  }
+
+  function redirectToPocketsmith() {
+    // Track the redirect event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'exit_page_click',
+        'redirect_destination': 'pocketsmith',
+        'user_id': getOrCreateUserId()
+      });
+    }
+    
+    // Get user ID and gclid
+    const sabeid = getOrCreateUserId();
+    const gclid = getGclid();
+    
+    // Build the URL with parameters for Pocketsmith (placeholder for now)
+    const baseUrl = 'https://www.pocketsmith.com';
+    const url = `${baseUrl}?fobs=${sabeid}&fobs2=${gclid}`;
     
     window.open(url, '_blank');
   }
