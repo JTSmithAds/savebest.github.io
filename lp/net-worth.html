@@ -31,12 +31,76 @@
     .fine-print { font-size: 0.75rem; color: #888; margin-top: 2rem; padding: 1rem; background-color: #f8f8f8; border-radius: 8px; line-height: 1.4; }
     .benefit-text { font-size: 0.9rem; color: #3f6b5d; font-weight: 500; margin-bottom: 1rem; }
     .urgency-text { font-size: 0.85rem; color: #d32f2f; font-weight: 500; margin-bottom: 1rem; }
-    .help-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; max-width: 400px; display: none; }
+    .help-tooltip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 1000; max-width: 400px; width: 90%; max-height: 80vh; overflow-y: auto; display: none; }
     .help-tooltip h3 { margin: 0 0 1rem 0; color: #3f6b5d; font-size: 1.1rem; }
     .help-tooltip p { margin: 0 0 1rem 0; line-height: 1.5; color: #555; }
-    .help-tooltip .close-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+    .help-tooltip .close-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; padding: 0.25rem; min-width: 2rem; min-height: 2rem; display: flex; align-items: center; justify-content: center; }
     .help-tooltip .close-btn:hover { color: #333; }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
+    
+    /* Mobile-specific styles for tooltips */
+    @media (max-width: 768px) {
+      .help-tooltip { 
+        width: 95%; 
+        max-width: none; 
+        padding: 1.25rem; 
+        margin: 1rem; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+        max-height: 85vh;
+      }
+      .help-tooltip h3 { font-size: 1rem; }
+      .help-tooltip p { font-size: 0.9rem; }
+      .help-tooltip .close-btn { 
+        top: 0.75rem; 
+        right: 0.75rem; 
+        font-size: 1.25rem; 
+        min-width: 2.5rem; 
+        min-height: 2.5rem; 
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .help-tooltip { 
+        width: 98%; 
+        padding: 1rem; 
+        margin: 0.5rem; 
+      }
+      .help-tooltip h3 { font-size: 0.95rem; }
+      .help-tooltip p { font-size: 0.85rem; }
+    }
+    
+    /* Exit modal button styles */
+    .exit-modal-buttons { 
+      display: flex; 
+      gap: 1rem; 
+      margin-top: 1.5rem; 
+      flex-direction: row; 
+    }
+    .exit-btn-secondary { 
+      flex: 1; 
+      background-color: #f5f5f5; 
+      border: 2px solid #ddd; 
+    }
+    .exit-btn-primary { 
+      flex: 1; 
+      background-color: #3f6b5d; 
+      color: white; 
+      border: 2px solid #3f6b5d; 
+    }
+    
+    /* Mobile styles for exit modal buttons */
+    @media (max-width: 480px) {
+      .exit-modal-buttons { 
+        flex-direction: column; 
+        gap: 0.75rem; 
+      }
+      .exit-btn-secondary, .exit-btn-primary { 
+        padding: 1rem 0.75rem; 
+        font-size: 0.95rem; 
+      }
+    }
   </style>
 </head>
 <body>
@@ -127,9 +191,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <button class="close-btn" onclick="closeExitConfirm()">&times;</button>
   <h3>Are you sure?</h3>
   <p>You're only a couple clicks away from setting up your net worth tracker!</p>
-  <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-    <button class="option-button" onclick="closeExitConfirm()" style="flex: 1; background-color: #f5f5f5; border: 2px solid #ddd;">Back to Form</button>
-    <button class="option-button" onclick="exitForm()" style="flex: 1; background-color: #3f6b5d; color: white; border: 2px solid #3f6b5d;">Exit</button>
+  <div class="exit-modal-buttons">
+    <button class="option-button exit-btn-secondary" onclick="closeExitConfirm()">Back to Form</button>
+    <button class="option-button exit-btn-primary" onclick="exitForm()">Exit</button>
   </div>
 </div>
 
