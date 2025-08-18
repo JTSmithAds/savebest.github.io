@@ -279,8 +279,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
      <div id="step-2" class="step hidden">
-     <div class="question">Rough guess at what you think your net worth is</div>
-     <div class="subtext">Estimate your current liquid net worth (a guess is fine). Liquid means cash, savings, investments, and retirement accounts.</div>
+     <div class="question">Rough guess at what you think your net worth is <span style="font-weight: normal; font-size: 0.9rem;">(optional)</span></div>
+     <div class="subtext">Estimate your current liquid net worth (a guess is fine). Liquid means cash, savings, investments, and retirement accounts. You can skip this step if you're not sure.</div>
     <div class="grid-buttons">
       <button class="option-button" onclick="selectAssets('<$10k')">&lt;$10k</button>
       <button class="option-button" onclick="selectAssets('$10k–$50k')">$10k–$50k</button>
@@ -288,6 +288,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="option-button" onclick="selectAssets('$100k–$500k')">$100k–$500k</button>
       <button class="option-button" onclick="selectAssets('$500k–$1m')">$500k–$1m</button>
       <button class="option-button" onclick="selectAssets('$1m+')">$1m+</button>
+      <button class="option-button" onclick="skipAssetGuess()">Skip for now</button>
     </div>
   </div>
 
@@ -752,10 +753,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       setStepOrder(['1','2','3-monarch','4']); 
       goTo('3-monarch'); 
     }
-    else { 
-      setStepOrder(['1','2']); 
-      goTo('2'); 
+    else {
+      setStepOrder(['1','2']);
+      goTo('2');
     }
+  }
+
+  function skipAssetGuess() {
+    trackFormEvent('net-worth', '2', 'skip', 'skip');
+    assetRange = '';
+    document.getElementById('empower-subtext').textContent = "Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture.";
+    setStepOrder(['1','2','3','4']);
+    goTo('3');
   }
 
   function initializeManualCalculation() {
