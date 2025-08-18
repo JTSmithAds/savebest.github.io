@@ -141,7 +141,40 @@
       font-size: 1.5rem;
       font-weight: bold;
       color: #3f6b5d;
+      margin-bottom: 0.5rem;
+    }
+    
+    .slider-range {
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+    
+    .custom-input-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
       margin-bottom: 1.5rem;
+    }
+    
+    .custom-input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 120px;
+      text-align: center;
+    }
+    
+    .custom-input:focus {
+      outline: none;
+      border-color: #3f6b5d;
+    }
+    
+    .custom-input-label {
+      font-size: 0.9rem;
+      color: #666;
     }
     
     .running-tally {
@@ -239,15 +272,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="step-1" class="step">
     <div class="question">Let's calculate your net worth. Would you like to use an automated mode or calculate manually?</div>
     <div class="subtext">Automated mode connects your accounts and tracks your net worth accurately over time. Manual mode lets you input your assets and liabilities step by step.</div>
-    <div class="grid-buttons">
-      <button class="option-button" onclick="selectCalculationMode('automated')">Calculate Automatically</button>
-      <button class="option-button" onclick="selectCalculationMode('manual')">Calculate Manually</button>
-    </div>
+         <div class="grid-buttons">
+       <button class="option-button" onclick="selectCalculationMode('automated')">Calculate and Track on Autopilot</button>
+       <button class="option-button" onclick="selectCalculationMode('manual')">Calculate Manually</button>
+     </div>
   </div>
 
-  <div id="step-2" class="step hidden">
-    <div class="question">What's your current liquid net worth?</div>
-    <div class="subtext">Estimate your current liquid net worth (a guess is fine). Liquid means cash, savings, investments, and retirement accounts.</div>
+     <div id="step-2" class="step hidden">
+     <div class="question">Rough guess at what you think your net worth is</div>
+     <div class="subtext">Estimate your current liquid net worth (a guess is fine). Liquid means cash, savings, investments, and retirement accounts.</div>
     <div class="grid-buttons">
       <button class="option-button" onclick="selectAssets('<$10k')">&lt;$10k</button>
       <button class="option-button" onclick="selectAssets('$10k–$50k')">$10k–$50k</button>
@@ -304,8 +337,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="question">How much cash do you have?</div>
     <div class="subtext">Include checking accounts, savings accounts, and physical cash.</div>
     <div class="slider-container">
-      <input type="range" id="cash-slider" min="0" max="1000000" step="1000" value="0" class="slider">
+      <input type="range" id="cash-slider" min="0" max="100" step="1" value="0" class="slider">
       <div class="slider-value">$<span id="cash-value">0</span></div>
+      <div class="slider-range">Range: $0 - $500,000</div>
+      <div class="custom-input-container">
+        <span class="custom-input-label">Or enter custom amount:</span>
+        <input type="text" id="cash-input" class="custom-input" placeholder="$0" maxlength="12">
+      </div>
     </div>
     <div class="running-tally">
       <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
@@ -319,8 +357,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="question">What's the value of your investments?</div>
     <div class="subtext">Include retirement accounts (401k, IRA), brokerage accounts, and other investments.</div>
     <div class="slider-container">
-      <input type="range" id="investments-slider" min="0" max="5000000" step="10000" value="0" class="slider">
+      <input type="range" id="investments-slider" min="0" max="100" step="1" value="0" class="slider">
       <div class="slider-value">$<span id="investments-value">0</span></div>
+      <div class="slider-range">Range: $0 - $10,000,000</div>
+      <div class="custom-input-container">
+        <span class="custom-input-label">Or enter custom amount:</span>
+        <input type="text" id="investments-input" class="custom-input" placeholder="$0" maxlength="12">
+      </div>
     </div>
     <div class="running-tally">
       <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
@@ -334,8 +377,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="question">What's the value of your real estate?</div>
     <div class="subtext">Include your home, rental properties, and other real estate assets.</div>
     <div class="slider-container">
-      <input type="range" id="real-estate-slider" min="0" max="10000000" step="50000" value="0" class="slider">
+      <input type="range" id="real-estate-slider" min="0" max="100" step="1" value="0" class="slider">
       <div class="slider-value">$<span id="real-estate-value">0</span></div>
+      <div class="slider-range">Range: $0 - $20,000,000</div>
+      <div class="custom-input-container">
+        <span class="custom-input-label">Or enter custom amount:</span>
+        <input type="text" id="real-estate-input" class="custom-input" placeholder="$0" maxlength="12">
+      </div>
     </div>
     <div class="running-tally">
       <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
@@ -349,8 +397,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="question">What's the value of your other assets?</div>
     <div class="subtext">Include vehicles, jewelry, collectibles, business interests, and other valuable items.</div>
     <div class="slider-container">
-      <input type="range" id="other-assets-slider" min="0" max="2000000" step="10000" value="0" class="slider">
+      <input type="range" id="other-assets-slider" min="0" max="100" step="1" value="0" class="slider">
       <div class="slider-value">$<span id="other-assets-value">0</span></div>
+      <div class="slider-range">Range: $0 - $3,000,000</div>
+      <div class="custom-input-container">
+        <span class="custom-input-label">Or enter custom amount:</span>
+        <input type="text" id="other-assets-input" class="custom-input" placeholder="$0" maxlength="12">
+      </div>
     </div>
     <div class="running-tally">
       <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
@@ -364,8 +417,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="question">How much do you owe on your mortgage(s)?</div>
     <div class="subtext">Include all mortgage balances on your properties.</div>
     <div class="slider-container">
-      <input type="range" id="mortgage-slider" min="0" max="5000000" step="10000" value="0" class="slider">
+      <input type="range" id="mortgage-slider" min="0" max="100" step="1" value="0" class="slider">
       <div class="slider-value">$<span id="mortgage-value">0</span></div>
+      <div class="slider-range">Range: $0 - $8,000,000</div>
+      <div class="custom-input-container">
+        <span class="custom-input-label">Or enter custom amount:</span>
+        <input type="text" id="mortgage-input" class="custom-input" placeholder="$0" maxlength="12">
+      </div>
     </div>
     <div class="running-tally">
       <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
@@ -379,8 +437,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="question">How much other debt do you have?</div>
     <div class="subtext">Include credit cards, car loans, student loans, personal loans, and other debts.</div>
     <div class="slider-container">
-      <input type="range" id="other-debt-slider" min="0" max="1000000" step="1000" value="0" class="slider">
+      <input type="range" id="other-debt-slider" min="0" max="100" step="1" value="0" class="slider">
       <div class="slider-value">$<span id="other-debt-value">0</span></div>
+      <div class="slider-range">Range: $0 - $2,000,000</div>
+      <div class="custom-input-container">
+        <span class="custom-input-label">Or enter custom amount:</span>
+        <input type="text" id="other-debt-input" class="custom-input" placeholder="$0" maxlength="12">
+      </div>
     </div>
     <div class="running-tally">
       <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
@@ -496,6 +559,122 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     otherDebt: 0
   };
 
+  // Logarithmic slider configuration
+  const sliderRanges = {
+    cash: { min: 0, max: 500000, center: 25000 }, // $0 to $500k, center at $25k
+    investments: { min: 0, max: 10000000, center: 200000 }, // $0 to $10M, center at $200k
+    realEstate: { min: 0, max: 20000000, center: 400000 }, // $0 to $20M, center at $400k
+    otherAssets: { min: 0, max: 3000000, center: 50000 }, // $0 to $3M, center at $50k
+    mortgage: { min: 0, max: 8000000, center: 300000 }, // $0 to $8M, center at $300k
+    otherDebt: { min: 0, max: 2000000, center: 25000 } // $0 to $2M, center at $25k
+  };
+
+  // Convert linear slider position (0-100) to logarithmic value
+  function sliderToValue(sliderPosition, range) {
+    if (sliderPosition === 0) return 0;
+    
+    // Use logarithmic scaling with center point
+    const logMin = Math.log(range.min + 1);
+    const logMax = Math.log(range.max + 1);
+    const logCenter = Math.log(range.center + 1);
+    
+    // Map 0-100 to logarithmic scale
+    let logValue;
+    if (sliderPosition <= 50) {
+      // 0-50 maps to min to center (logarithmically)
+      const ratio = sliderPosition / 50;
+      logValue = logMin + (logCenter - logMin) * ratio;
+    } else {
+      // 50-100 maps to center to max (logarithmically)
+      const ratio = (sliderPosition - 50) / 50;
+      logValue = logCenter + (logMax - logCenter) * ratio;
+    }
+    
+    // Round to nearest nice number
+    const rawValue = Math.exp(logValue) - 1;
+    return roundToNiceNumber(rawValue);
+  }
+  
+  // Round to nice numbers (multiples of 1000, 5000, 10000, etc.)
+  function roundToNiceNumber(value) {
+    if (value < 1000) {
+      return Math.round(value / 100) * 100; // Round to nearest 100
+    } else if (value < 10000) {
+      return Math.round(value / 500) * 500; // Round to nearest 500
+    } else if (value < 100000) {
+      return Math.round(value / 1000) * 1000; // Round to nearest 1000
+    } else if (value < 1000000) {
+      return Math.round(value / 5000) * 5000; // Round to nearest 5000
+    } else {
+      return Math.round(value / 10000) * 10000; // Round to nearest 10000
+    }
+  }
+
+  // Parse currency input and return numeric value
+  function parseCurrencyInput(input) {
+    // Remove all non-numeric characters except decimal point
+    const cleaned = input.replace(/[^\d.]/g, '');
+    
+    // Ensure only one decimal point
+    const parts = cleaned.split('.');
+    if (parts.length > 2) {
+      return null; // Invalid format
+    }
+    
+    const numericValue = parseFloat(cleaned);
+    return isNaN(numericValue) ? null : numericValue;
+  }
+
+  // Format number as currency string
+  function formatCurrency(value) {
+    return value.toLocaleString();
+  }
+
+  // Update slider position based on custom input value
+  function updateSliderFromInput(inputValue, sliderId, rangeKey) {
+    const slider = document.getElementById(sliderId);
+    const range = sliderRanges[rangeKey];
+    
+    // Use the actual input value, not clamped to slider range
+    const actualValue = Math.max(0, inputValue); // Only ensure non-negative
+    
+    // For slider position, clamp to range for visual representation
+    const clampedForSlider = Math.max(range.min, Math.min(range.max, actualValue));
+    const sliderPosition = valueToSlider(clampedForSlider, range);
+    slider.value = sliderPosition;
+    
+    // Update display value with actual value (not clamped)
+    const valueSpan = document.getElementById(sliderId.replace('-slider', '-value'));
+    valueSpan.textContent = actualValue.toLocaleString();
+    
+    // Update manual data with actual value
+    const dataKey = rangeKey;
+    manualData[dataKey] = actualValue;
+    
+    // Update running tally
+    updateRunningTally();
+  }
+
+  // Convert value back to slider position (0-100)
+  function valueToSlider(value, range) {
+    if (value === 0) return 0;
+    
+    const logMin = Math.log(range.min + 1);
+    const logMax = Math.log(range.max + 1);
+    const logCenter = Math.log(range.center + 1);
+    const logValue = Math.log(value + 1);
+    
+    if (logValue <= logCenter) {
+      // Map to 0-50 range
+      const ratio = (logValue - logMin) / (logCenter - logMin);
+      return Math.round(ratio * 50);
+    } else {
+      // Map to 50-100 range
+      const ratio = (logValue - logCenter) / (logMax - logCenter);
+      return Math.round(50 + ratio * 50);
+    }
+  }
+
   function setStepOrder(order) { 
     stepOrder = order; 
     updateProgress(); 
@@ -579,32 +758,115 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function initializeManualCalculation() {
-    // Set up slider event listeners
-    const sliders = ['cash', 'investments', 'real-estate', 'other-assets', 'mortgage', 'other-debt'];
+    // Set up slider event listeners with proper key mapping
+    const sliderConfigs = [
+      { type: 'cash', key: 'cash' },
+      { type: 'investments', key: 'investments' },
+      { type: 'real-estate', key: 'realEstate' },
+      { type: 'other-assets', key: 'otherAssets' },
+      { type: 'mortgage', key: 'mortgage' },
+      { type: 'other-debt', key: 'otherDebt' }
+    ];
     
-    sliders.forEach(type => {
-      const slider = document.getElementById(`${type}-slider`);
-      const valueSpan = document.getElementById(`${type}-value`);
+    sliderConfigs.forEach(config => {
+      const slider = document.getElementById(`${config.type}-slider`);
+      const valueSpan = document.getElementById(`${config.type}-value`);
+      const customInput = document.getElementById(`${config.type}-input`);
       
       if (slider && valueSpan) {
+        // Set initial slider position to 0
+        slider.value = 0;
+        
+        // Set initial display value to 0
+        valueSpan.textContent = '0';
+        manualData[config.key] = 0;
+        
+        // Set up slider event listener
         slider.addEventListener('input', function() {
-          const value = parseInt(this.value);
+          const sliderPosition = parseInt(this.value);
+          const range = sliderRanges[config.key];
+          const value = sliderToValue(sliderPosition, range);
           valueSpan.textContent = value.toLocaleString();
           
           // Update manual data
-          const key = type.replace('-', '');
-          manualData[key] = value;
+          manualData[config.key] = value;
+          
+          // Update custom input to match slider
+          if (customInput) {
+            customInput.value = value > 0 ? `$${value.toLocaleString()}` : '';
+          }
           
           // Update running tally
           updateRunningTally();
         });
       }
+      
+      // Set up custom input event listener
+      if (customInput) {
+        customInput.addEventListener('input', function() {
+          const inputValue = this.value;
+          
+          // Allow empty input
+          if (inputValue === '' || inputValue === '$') {
+            return;
+          }
+          
+          // Parse the input value
+          const numericValue = parseCurrencyInput(inputValue);
+          
+          if (numericValue !== null) {
+            // Update slider and display
+            updateSliderFromInput(numericValue, `${config.type}-slider`, config.key);
+            
+            // Format the input field
+            this.value = `$${numericValue.toLocaleString()}`;
+          } else {
+            // Invalid input, revert to previous value
+            this.value = manualData[config.key] > 0 ? `$${manualData[config.key].toLocaleString()}` : '';
+          }
+        });
+        
+        // Handle focus and blur events
+        customInput.addEventListener('focus', function() {
+          if (this.value === '') {
+            this.value = '$';
+          }
+        });
+        
+        customInput.addEventListener('blur', function() {
+          if (this.value === '$' || this.value === '') {
+            this.value = '';
+          }
+        });
+        
+        // Handle keydown for Enter key
+        customInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            this.blur();
+          }
+        });
+      }
     });
+    
+    // Update initial tally
+    updateRunningTally();
   }
 
   function updateRunningTally() {
-    const totalAssets = manualData.cash + manualData.investments + manualData.realEstate + manualData.otherAssets;
-    const totalLiabilities = manualData.mortgage + manualData.otherDebt;
+    // Since all values default to 0, we can show all values in the running tally
+    let totalAssets = 0;
+    let totalLiabilities = 0;
+    
+    // Include all asset values
+    totalAssets += manualData.cash;
+    totalAssets += manualData.investments;
+    totalAssets += manualData.realEstate;
+    totalAssets += manualData.otherAssets;
+    
+    // Include all liability values
+    totalLiabilities += manualData.mortgage;
+    totalLiabilities += manualData.otherDebt;
+    
     const netWorth = totalAssets - totalLiabilities;
     
     // Update all tally displays
@@ -621,9 +883,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Save current step data
     const slider = document.getElementById(`${currentStep}-slider`);
     if (slider) {
-      const value = parseInt(slider.value);
-      const key = currentStep.replace('-', '');
-      manualData[key] = value;
+      const sliderPosition = parseInt(slider.value);
+      
+      // Map step names to slider range keys
+      const keyMapping = {
+        'cash': 'cash',
+        'investments': 'investments',
+        'real-estate': 'realEstate',
+        'other-assets': 'otherAssets',
+        'mortgage': 'mortgage',
+        'other-debt': 'otherDebt'
+      };
+      
+      const range = sliderRanges[keyMapping[currentStep]];
+      const value = sliderToValue(sliderPosition, range);
+      manualData[keyMapping[currentStep]] = value;
     }
     
     // Determine next step
