@@ -101,6 +101,119 @@
         font-size: 0.95rem; 
       }
     }
+
+    /* Slider styles */
+    .slider-container {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    
+    .slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: #e6e6e6;
+      outline: none;
+      -webkit-appearance: none;
+      margin-bottom: 1rem;
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #3f6b5d;
+      cursor: pointer;
+    }
+    
+    .slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #3f6b5d;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .slider-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #3f6b5d;
+      margin-bottom: 1.5rem;
+    }
+    
+    .running-tally {
+      background: #f8f8f8;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+    
+    .tally-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    
+    .tally-item.total {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #3f6b5d;
+      border-top: 1px solid #ddd;
+      padding-top: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .final-results {
+      background: #f8f8f8;
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+    }
+    
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .result-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .result-item.total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #3f6b5d;
+      border-top: 2px solid #3f6b5d;
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .result-label {
+      font-size: 1rem;
+      color: #666;
+    }
+    
+    .result-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .result-item.total .result-value {
+      color: #3f6b5d;
+      font-size: 1.4rem;
+    }
   </style>
 </head>
 <body>
@@ -124,13 +237,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
   <div id="step-1" class="step">
-    <div class="question">How do you currently track your finances?</div>
-    <div class="subtext">This helps us recommend the right solution for your needs and experience level.</div>
+    <div class="question">Let's calculate your net worth. Would you like to use an automated mode or calculate manually?</div>
+    <div class="subtext">Automated mode connects your accounts and tracks your net worth accurately over time. Manual mode lets you input your assets and liabilities step by step.</div>
     <div class="grid-buttons">
-      <button class="option-button" onclick="nextStep('Spreadsheet')">Excel/Google Sheets</button>
-             <button class="option-button" onclick="nextStep('Free Software')">Free Software</button>
-      <button class="option-button" onclick="nextStep('Paid Software')">Paid Software</button>
-      <button class="option-button" onclick="nextStep('I don\'t track my net worth')">I don't track anything</button>
+      <button class="option-button" onclick="selectCalculationMode('automated')">Calculate Automatically</button>
+      <button class="option-button" onclick="selectCalculationMode('manual')">Calculate Manually</button>
     </div>
   </div>
 
@@ -149,26 +260,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="step-3" class="step hidden">
     <div class="logo"><img src="/assets/empower-logo.svg" alt="Empower Logo"></div>
-    <div class="question" id="empower-recommendation">🎯 Perfect Match Found!</div>
-    <div class="subtext" id="empower-subtext">Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.</div>
+    <div class="question" id="empower-recommendation">Continue to Track Net Worth Automatically</div>
+    <div class="subtext" id="empower-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker.</div>
     <div class="benefit-text">✓ Free forever • Syncs all accounts • Professional-grade insights</div>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Get Started Free →</button></div>
+    <div class="fine-print">
+      <strong>Disclosure:</strong> We are compensated for business referred to most of the companies we mention.
+    </div>
   </div>
 
   <div id="step-3-monarch" class="step hidden">
     <div class="logo"><img src="/assets/MonarchLogo.PNG" alt="Monarch Money Logo"></div>
-    <div class="question" id="monarch-recommendation">🎯 Perfect Match Found!</div>
-    <div class="subtext" id="monarch-subtext">Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.</div>
+    <div class="question" id="monarch-recommendation">Continue to Track Net Worth Automatically</div>
+    <div class="subtext" id="monarch-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform.</div>
     <div class="benefit-text">✓ All-in-one financial management • Beautiful interface • Expert insights</div>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToMonarch()">Get Started →</button></div>
+    <div class="fine-print">
+      <strong>Disclosure:</strong> We are compensated for business referred to most of the companies we mention.
+    </div>
   </div>
 
   <div id="step-3-pocketsmith" class="step hidden">
     <div class="logo"><img src="/assets/pocketsmith-logo.svg" alt="Pocketsmith Logo"></div>
-    <div class="question" id="pocketsmith-recommendation">🎯 Perfect Match Found!</div>
-    <div class="subtext" id="pocketsmith-subtext">Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform. It's the ideal solution for users in your financial situation.</div>
+    <div class="question" id="pocketsmith-recommendation">Continue to Track Net Worth Automatically</div>
+    <div class="subtext" id="pocketsmith-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform.</div>
     <div class="benefit-text">✓ Advanced forecasting • Cash flow planning • Goal tracking</div>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToPocketsmith()">Get Started →</button></div>
+    <div class="fine-print">
+      <strong>Disclosure:</strong> We are compensated for business referred to most of the companies we mention.
+    </div>
   </div>
 
   <div id="step-4" class="step hidden">
@@ -179,9 +299,126 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="grid-buttons"><button class="submit-button" onclick="submitEmail()">Get My Free Roadmap →</button></div>
   </div>
 
-  <div class="fine-print">
-    <strong>Disclosure:</strong> Most of the companies mentioned on this site compensate us in some way, whether an affiliate or direct relationship. This helps us keep our tools free. We only recommend products we genuinely believe will help you.
+  <!-- Manual Calculation Steps -->
+  <div id="step-manual-cash" class="step hidden">
+    <div class="question">How much cash do you have?</div>
+    <div class="subtext">Include checking accounts, savings accounts, and physical cash.</div>
+    <div class="slider-container">
+      <input type="range" id="cash-slider" min="0" max="1000000" step="1000" value="0" class="slider">
+      <div class="slider-value">$<span id="cash-value">0</span></div>
+    </div>
+    <div class="running-tally">
+      <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
+      <div class="tally-item">Liabilities: $<span id="total-liabilities">0</span></div>
+      <div class="tally-item total">Net Worth: $<span id="net-worth-total">0</span></div>
+    </div>
+    <div class="grid-buttons"><button class="submit-button" onclick="nextManualStep('cash')">Next →</button></div>
   </div>
+
+  <div id="step-manual-investments" class="step hidden">
+    <div class="question">What's the value of your investments?</div>
+    <div class="subtext">Include retirement accounts (401k, IRA), brokerage accounts, and other investments.</div>
+    <div class="slider-container">
+      <input type="range" id="investments-slider" min="0" max="5000000" step="10000" value="0" class="slider">
+      <div class="slider-value">$<span id="investments-value">0</span></div>
+    </div>
+    <div class="running-tally">
+      <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
+      <div class="tally-item">Liabilities: $<span id="total-liabilities">0</span></div>
+      <div class="tally-item total">Net Worth: $<span id="net-worth-total">0</span></div>
+    </div>
+    <div class="grid-buttons"><button class="submit-button" onclick="nextManualStep('investments')">Next →</button></div>
+  </div>
+
+  <div id="step-manual-real-estate" class="step hidden">
+    <div class="question">What's the value of your real estate?</div>
+    <div class="subtext">Include your home, rental properties, and other real estate assets.</div>
+    <div class="slider-container">
+      <input type="range" id="real-estate-slider" min="0" max="10000000" step="50000" value="0" class="slider">
+      <div class="slider-value">$<span id="real-estate-value">0</span></div>
+    </div>
+    <div class="running-tally">
+      <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
+      <div class="tally-item">Liabilities: $<span id="total-liabilities">0</span></div>
+      <div class="tally-item total">Net Worth: $<span id="net-worth-total">0</span></div>
+    </div>
+    <div class="grid-buttons"><button class="submit-button" onclick="nextManualStep('real-estate')">Next →</button></div>
+  </div>
+
+  <div id="step-manual-other-assets" class="step hidden">
+    <div class="question">What's the value of your other assets?</div>
+    <div class="subtext">Include vehicles, jewelry, collectibles, business interests, and other valuable items.</div>
+    <div class="slider-container">
+      <input type="range" id="other-assets-slider" min="0" max="2000000" step="10000" value="0" class="slider">
+      <div class="slider-value">$<span id="other-assets-value">0</span></div>
+    </div>
+    <div class="running-tally">
+      <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
+      <div class="tally-item">Liabilities: $<span id="total-liabilities">0</span></div>
+      <div class="tally-item total">Net Worth: $<span id="net-worth-total">0</span></div>
+    </div>
+    <div class="grid-buttons"><button class="submit-button" onclick="nextManualStep('other-assets')">Next →</button></div>
+  </div>
+
+  <div id="step-manual-mortgage" class="step hidden">
+    <div class="question">How much do you owe on your mortgage(s)?</div>
+    <div class="subtext">Include all mortgage balances on your properties.</div>
+    <div class="slider-container">
+      <input type="range" id="mortgage-slider" min="0" max="5000000" step="10000" value="0" class="slider">
+      <div class="slider-value">$<span id="mortgage-value">0</span></div>
+    </div>
+    <div class="running-tally">
+      <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
+      <div class="tally-item">Liabilities: $<span id="total-liabilities">0</span></div>
+      <div class="tally-item total">Net Worth: $<span id="net-worth-total">0</span></div>
+    </div>
+    <div class="grid-buttons"><button class="submit-button" onclick="nextManualStep('mortgage')">Next →</button></div>
+  </div>
+
+  <div id="step-manual-other-debt" class="step hidden">
+    <div class="question">How much other debt do you have?</div>
+    <div class="subtext">Include credit cards, car loans, student loans, personal loans, and other debts.</div>
+    <div class="slider-container">
+      <input type="range" id="other-debt-slider" min="0" max="1000000" step="1000" value="0" class="slider">
+      <div class="slider-value">$<span id="other-debt-value">0</span></div>
+    </div>
+    <div class="running-tally">
+      <div class="tally-item">Assets: $<span id="total-assets">0</span></div>
+      <div class="tally-item">Liabilities: $<span id="total-liabilities">0</span></div>
+      <div class="tally-item total">Net Worth: $<span id="net-worth-total">0</span></div>
+    </div>
+    <div class="grid-buttons"><button class="submit-button" onclick="nextManualStep('other-debt')">Next →</button></div>
+  </div>
+
+  <div id="step-manual-results" class="step hidden">
+    <div class="question">Your Net Worth Calculation</div>
+    <div class="subtext">Here's your complete financial picture based on your inputs.</div>
+    <div class="final-results">
+      <div class="result-item">
+        <div class="result-label">Total Assets</div>
+        <div class="result-value" id="final-assets">$0</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Total Liabilities</div>
+        <div class="result-value" id="final-liabilities">$0</div>
+      </div>
+      <div class="result-item total">
+        <div class="result-label">Net Worth</div>
+        <div class="result-value" id="final-net-worth">$0</div>
+      </div>
+    </div>
+    <div class="logo" id="manual-recommendation-logo">
+      <img src="" alt="Recommended Platform" style="max-width: 180px; height: auto; margin: 1.5rem 0;">
+    </div>
+    <div class="grid-buttons" id="manual-recommendation-buttons">
+      <button class="submit-button" id="manual-recommendation-button" onclick="redirectFromManualResults()">Track Net Worth Automatically w/ Empower</button>
+    </div>
+    <div class="fine-print" id="manual-disclaimer">
+      <strong>Disclosure:</strong> We are compensated for business referred to most of the companies we mention.
+    </div>
+  </div>
+
+
 </div>
 
 <!-- Help Tooltip Overlay -->
@@ -239,12 +476,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'user_id': userId
       });
     }
+    
+    // Initialize manual calculation sliders if they exist
+    initializeManualCalculation();
   });
   
-  let trackingMethod = '';
+  let calculationMode = '';
   let assetRange = '';
   let stepOrder = ['1'];
   let currentIndex = 0;
+  
+  // Manual calculation data
+  let manualData = {
+    cash: 0,
+    investments: 0,
+    realEstate: 0,
+    otherAssets: 0,
+    mortgage: 0,
+    otherDebt: 0
+  };
 
   function setStepOrder(order) { 
     stepOrder = order; 
@@ -266,7 +516,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'form_value': value,
         'user_id': getOrCreateUserId(),
         'asset_range': assetRange,
-        'tracking_method': trackingMethod
+        'calculation_mode': calculationMode
       });
     }
     
@@ -283,13 +533,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }
 
-  function nextStep(value) { 
-    if (value) {
-      trackFormEvent('net-worth', '1', 'select', value);
-      trackingMethod = value;
+  function selectCalculationMode(mode) {
+    trackFormEvent('net-worth', '1', 'select', mode);
+    calculationMode = mode;
+    
+    if (mode === 'automated') {
+      // For automated mode, go to liquid net worth question
+      setStepOrder(['1','2','3','4']);
+      goTo('2');
+    } else {
+      // For manual mode, start the manual calculation flow
+      setStepOrder(['1','manual-cash','manual-investments','manual-real-estate','manual-other-assets','manual-mortgage','manual-other-debt','manual-results','4']);
+      goTo('manual-cash');
+      initializeManualCalculation();
     }
-    setStepOrder(['1','2']);
-    goTo('2');
   }
 
   function selectAssets(value) {
@@ -300,24 +557,118 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const lowValue = ['<$10k'];
     
     if (highValue.includes(value)) { 
-      document.getElementById('empower-recommendation').textContent = `🎯 Perfect Match Found!`;
-      document.getElementById('empower-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker. It's the #1 choice for users in your financial situation.`;
+      document.getElementById('empower-recommendation').textContent = `Continue to Track Net Worth Automatically`;
+      document.getElementById('empower-subtext').textContent = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker.`;
       setStepOrder(['1','2','3','4']); 
       goTo('3'); 
     }
     else if (pocketsmithValue.includes(value)) { 
-      document.getElementById('pocketsmith-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform. It's the ideal solution for users in your financial situation.`;
+      document.getElementById('pocketsmith-subtext').textContent = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform.`;
       setStepOrder(['1','2','3-pocketsmith','4']); 
       goTo('3-pocketsmith'); 
     }
     else if (lowValue.includes(value)) { 
-      document.getElementById('monarch-subtext').textContent = `Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform. It's the ideal solution for users in your financial situation.`;
+      document.getElementById('monarch-subtext').textContent = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform.`;
       setStepOrder(['1','2','3-monarch','4']); 
       goTo('3-monarch'); 
     }
     else { 
       setStepOrder(['1','2']); 
       goTo('2'); 
+    }
+  }
+
+  function initializeManualCalculation() {
+    // Set up slider event listeners
+    const sliders = ['cash', 'investments', 'real-estate', 'other-assets', 'mortgage', 'other-debt'];
+    
+    sliders.forEach(type => {
+      const slider = document.getElementById(`${type}-slider`);
+      const valueSpan = document.getElementById(`${type}-value`);
+      
+      if (slider && valueSpan) {
+        slider.addEventListener('input', function() {
+          const value = parseInt(this.value);
+          valueSpan.textContent = value.toLocaleString();
+          
+          // Update manual data
+          const key = type.replace('-', '');
+          manualData[key] = value;
+          
+          // Update running tally
+          updateRunningTally();
+        });
+      }
+    });
+  }
+
+  function updateRunningTally() {
+    const totalAssets = manualData.cash + manualData.investments + manualData.realEstate + manualData.otherAssets;
+    const totalLiabilities = manualData.mortgage + manualData.otherDebt;
+    const netWorth = totalAssets - totalLiabilities;
+    
+    // Update all tally displays
+    const tallyElements = document.querySelectorAll('#total-assets');
+    const liabilityElements = document.querySelectorAll('#total-liabilities');
+    const netWorthElements = document.querySelectorAll('#net-worth-total');
+    
+    tallyElements.forEach(el => el.textContent = totalAssets.toLocaleString());
+    liabilityElements.forEach(el => el.textContent = totalLiabilities.toLocaleString());
+    netWorthElements.forEach(el => el.textContent = netWorth.toLocaleString());
+  }
+
+  function nextManualStep(currentStep) {
+    // Save current step data
+    const slider = document.getElementById(`${currentStep}-slider`);
+    if (slider) {
+      const value = parseInt(slider.value);
+      const key = currentStep.replace('-', '');
+      manualData[key] = value;
+    }
+    
+    // Determine next step
+    const manualSteps = ['manual-cash', 'manual-investments', 'manual-real-estate', 'manual-other-assets', 'manual-mortgage', 'manual-other-debt'];
+    const currentIndex = manualSteps.indexOf(`manual-${currentStep}`);
+    const nextStep = manualSteps[currentIndex + 1];
+    
+    if (nextStep) {
+      goTo(nextStep);
+    } else {
+      // We're done with manual calculation, show results
+      goTo('manual-results');
+    }
+  }
+
+  function updateFinalResults() {
+    const totalAssets = manualData.cash + manualData.investments + manualData.realEstate + manualData.otherAssets;
+    const totalLiabilities = manualData.mortgage + manualData.otherDebt;
+    const netWorth = totalAssets - totalLiabilities;
+    
+    document.getElementById('final-assets').textContent = `$${totalAssets.toLocaleString()}`;
+    document.getElementById('final-liabilities').textContent = `$${totalLiabilities.toLocaleString()}`;
+    document.getElementById('final-net-worth').textContent = `$${netWorth.toLocaleString()}`;
+  }
+
+  function showManualRecommendation() {
+    const liquidAssets = manualData.cash + manualData.investments;
+    
+    // Get the recommendation elements
+    const logoElement = document.getElementById('manual-recommendation-logo');
+    const buttonElement = document.getElementById('manual-recommendation-button');
+    
+    // Determine recommendation based on liquid assets (cash + investments) only
+    if (liquidAssets >= 100000) {
+      // Show Empower recommendation
+      logoElement.querySelector('img').src = '/assets/empower-logo.svg';
+      logoElement.querySelector('img').alt = 'Empower Logo';
+      buttonElement.textContent = 'Track Net Worth Automatically w/ Empower';
+      buttonElement.onclick = redirectToEmpowerManual;
+    } else {
+      // Show Pocketsmith recommendation
+      logoElement.querySelector('img').src = '/assets/pocketsmith-logo.svg';
+      logoElement.querySelector('img').alt = 'Pocketsmith Logo';
+      buttonElement.textContent = 'Track Net Worth Automatically w/ Pocketsmith';
+      buttonElement.onclick = redirectToPocketsmithManual;
     }
   }
 
@@ -335,6 +686,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (step4Subtext) {
         step4Subtext.textContent = `We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.`;
       }
+    }
+    
+    // Handle manual results step
+    if (id === 'manual-results') {
+      updateFinalResults();
+      showManualRecommendation();
     }
   }
 
@@ -390,7 +747,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'redirect_destination': 'empower',
         'user_id': getOrCreateUserId(),
         'asset_range': assetRange,
-        'tracking_method': trackingMethod
+        'calculation_mode': calculationMode
       });
     }
     
@@ -417,7 +774,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'redirect_destination': 'monarch',
         'user_id': getOrCreateUserId(),
         'asset_range': assetRange,
-        'tracking_method': trackingMethod
+        'calculation_mode': calculationMode
       });
     }
     
@@ -444,7 +801,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'redirect_destination': 'pocketsmith',
         'user_id': getOrCreateUserId(),
         'asset_range': assetRange,
-        'tracking_method': trackingMethod
+        'calculation_mode': calculationMode
       });
     }
     
@@ -459,6 +816,72 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.open(url, '_blank');
     document.title = 'Level Up! Add Your Information to Advance';
     goTo('4');
+  }
+
+  function redirectToEmpowerManual() {
+    trackFormEvent('net-worth', 'manual-empower', 'click', 'continue');
+    
+    // Track the redirect event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'redirect_click',
+        'redirect_destination': 'empower',
+        'user_id': getOrCreateUserId(),
+        'asset_range': 'manual_calculation',
+        'calculation_mode': calculationMode
+      });
+    }
+    
+    // Get user ID and gclid
+    const sabeid = getOrCreateUserId();
+    const gclid = getGclid();
+    
+    // Build the URL with parameters
+    const baseUrl = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1058727&trid=1368848.157618&foc=16&fot=9999&fos=6';
+    const url = `${baseUrl}&fobs=${sabeid}&fobs2=${gclid}`;
+    
+    window.open(url, '_blank');
+    document.title = 'Level Up! Add Your Information to Advance';
+    goTo('4');
+  }
+
+  function redirectToPocketsmithManual() {
+    trackFormEvent('net-worth', 'manual-pocketsmith', 'click', 'continue');
+    
+    // Track the redirect event
+    if (typeof dataLayer !== 'undefined') {
+      dataLayer.push({
+        'event': 'redirect_click',
+        'redirect_destination': 'pocketsmith',
+        'user_id': getOrCreateUserId(),
+        'asset_range': 'manual_calculation',
+        'calculation_mode': calculationMode
+      });
+    }
+    
+    // Get user ID and gclid
+    const sabeid = getOrCreateUserId();
+    const gclid = getGclid();
+    
+    // Build the URL with parameters for Pocketsmith (placeholder for now)
+    const baseUrl = 'https://www.pocketsmith.com';
+    const url = `${baseUrl}?fobs=${sabeid}&fobs2=${gclid}`;
+    
+    window.open(url, '_blank');
+    document.title = 'Level Up! Add Your Information to Advance';
+    goTo('4');
+  }
+
+  function redirectFromManualResults() {
+    // This function is called by the button onclick, but the actual redirect
+    // is handled by the specific redirect functions assigned in showManualRecommendation
+    // This is just a fallback in case the onclick assignment fails
+    const liquidAssets = manualData.cash + manualData.investments;
+    if (liquidAssets >= 100000) {
+      redirectToEmpowerManual();
+    } else {
+      redirectToPocketsmithManual();
+    }
   }
 
   function isValidEmail(email) {
@@ -480,14 +903,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           'email_provided': 'yes',
           'user_id': getOrCreateUserId(),
           'asset_range': assetRange,
-          'tracking_method': trackingMethod
+          'calculation_mode': calculationMode
         });
       }
       
       // Store user preferences
       localStorage.setItem('savebest_user_preferences', JSON.stringify({
         asset_range: assetRange,
-        tracking_method: trackingMethod,
+        calculation_mode: calculationMode,
         email: email
       }));
       // Here you would typically send the data to your backend
@@ -503,7 +926,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           'email_error': 'invalid_format',
           'user_id': getOrCreateUserId(),
           'asset_range': assetRange,
-          'tracking_method': trackingMethod
+          'calculation_mode': calculationMode
         });
       }
       
@@ -547,7 +970,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'exit_reason': 'user_confirmed',
         'user_id': getOrCreateUserId(),
         'asset_range': assetRange,
-        'tracking_method': trackingMethod
+        'calculation_mode': calculationMode
       });
     }
     
@@ -559,8 +982,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const currentStep = stepOrder[currentIndex];
     const helpData = {
       '1': {
-        title: "Why are we asking about your current tracking method?",
-        content: "Understanding how you currently manage your finances helps us recommend the right solution. If you're using spreadsheets, you might need something more automated. If you're already using apps, we can suggest upgrades. If you're not tracking at all, we'll start with the basics."
+        title: "Why are we asking about calculation mode?",
+        content: "We want to give you the best experience for calculating your net worth. Automated mode connects your accounts directly and tracks everything automatically over time. Manual mode lets you input your assets and liabilities step by step, giving you more control and privacy. Choose what works best for you!"
       },
       '2': {
         title: "Why are we asking about your net worth?",
@@ -581,7 +1004,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       '4': {
         title: "Why are we asking for your email?",
         content: "We want to send you personalized strategies to grow your wealth faster. Based on your net worth and current situation, we'll share specific tips, tools, and opportunities that are most relevant to you. You can unsubscribe anytime, and we'll never spam you."
-      }
+      },
+      'manual-cash': {
+        title: "Why are we asking about cash?",
+        content: "Cash includes all your liquid assets - checking accounts, savings accounts, and physical cash. This is the foundation of your financial picture and helps us understand your immediate financial position."
+      },
+      'manual-investments': {
+        title: "Why are we asking about investments?",
+        content: "Investments include retirement accounts (401k, IRA), brokerage accounts, and other investment vehicles. These are often your largest assets and key to long-term wealth building."
+      },
+      'manual-real-estate': {
+        title: "Why are we asking about real estate?",
+        content: "Real estate includes your home, rental properties, and other real estate assets. This is typically one of the largest components of net worth for most people."
+      },
+      'manual-other-assets': {
+        title: "Why are we asking about other assets?",
+        content: "Other assets include vehicles, jewelry, collectibles, business interests, and other valuable items. These can add up significantly to your total net worth."
+      },
+      'manual-mortgage': {
+        title: "Why are we asking about mortgage debt?",
+        content: "Mortgage debt is typically the largest liability for most people. We need to subtract this from your real estate value to get an accurate net worth calculation."
+      },
+      'manual-other-debt': {
+        title: "Why are we asking about other debt?",
+        content: "Other debt includes credit cards, car loans, student loans, personal loans, and other debts. All liabilities need to be subtracted from your assets to calculate true net worth."
+      },
+             'manual-results': {
+         title: "Understanding your net worth calculation",
+         content: "Your net worth is calculated as Total Assets minus Total Liabilities. This gives you a complete picture of your financial position. A positive net worth means you own more than you owe, while a negative net worth means you owe more than you own."
+       }
     };
     return helpData[currentStep] || {
       title: "Help",
