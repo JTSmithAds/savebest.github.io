@@ -548,6 +548,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   let assetRange = '';
   let stepOrder = ['1'];
   let currentIndex = 0;
+  let manualInitialized = false;
   
   // Manual calculation data
   let manualData = {
@@ -758,6 +759,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   function initializeManualCalculation() {
+    if (manualInitialized) return;
+    manualInitialized = true;
+
     // Set up slider event listeners with proper key mapping
     const sliderConfigs = [
       { type: 'cash', key: 'cash' },
