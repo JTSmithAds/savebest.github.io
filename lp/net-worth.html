@@ -247,6 +247,19 @@
       color: #3f6b5d;
       font-size: 1.4rem;
     }
+    
+    /* Clickable company name styles */
+    .clickable-company {
+      color: #3f6b5d;
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    .clickable-company:hover {
+      color: #2a4a3f;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -294,7 +307,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="step-3" class="step hidden">
     <div class="logo"><img src="/assets/empower-logo.svg" alt="Empower Logo"></div>
     <div class="question" id="empower-recommendation">Continue to Track Net Worth Automatically</div>
-    <div class="subtext" id="empower-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker.</div>
+    <div class="subtext" id="empower-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend <span class="clickable-company" onclick="redirectToEmpower()">Empower's</span> free net worth tracker.</div>
     <div class="benefit-text">✓ Free forever • Syncs all accounts • Professional-grade insights</div>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToEmpower()">Get Started Free →</button></div>
     <div class="fine-print">
@@ -305,7 +318,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="step-3-monarch" class="step hidden">
     <div class="logo"><img src="/assets/MonarchLogo.PNG" alt="Monarch Money Logo"></div>
     <div class="question" id="monarch-recommendation">Continue to Track Net Worth Automatically</div>
-    <div class="subtext" id="monarch-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform.</div>
+    <div class="subtext" id="monarch-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend <span class="clickable-company" onclick="redirectToMonarch()">Monarch Money's</span> comprehensive financial management platform.</div>
     <div class="benefit-text">✓ All-in-one financial management • Beautiful interface • Expert insights</div>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToMonarch()">Get Started →</button></div>
     <div class="fine-print">
@@ -316,7 +329,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="step-3-pocketsmith" class="step hidden">
     <div class="logo"><img src="/assets/pocketsmith-logo.svg" alt="Pocketsmith Logo"></div>
     <div class="question" id="pocketsmith-recommendation">Continue to Track Net Worth Automatically</div>
-    <div class="subtext" id="pocketsmith-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform.</div>
+    <div class="subtext" id="pocketsmith-subtext">Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend <span class="clickable-company" onclick="redirectToPocketsmith()">Pocketsmith's</span> powerful financial forecasting platform.</div>
     <div class="benefit-text">✓ Advanced forecasting • Cash flow planning • Goal tracking</div>
     <div class="grid-buttons"><button class="option-button" onclick="redirectToPocketsmith()">Get Started →</button></div>
     <div class="fine-print">
@@ -737,17 +750,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     if (highValue.includes(value)) { 
       document.getElementById('empower-recommendation').textContent = `Continue to Track Net Worth Automatically`;
-      document.getElementById('empower-subtext').textContent = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Empower's free net worth tracker.`;
+      document.getElementById('empower-subtext').innerHTML = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend <span class="clickable-company" onclick="redirectToEmpower()">Empower's</span> free net worth tracker.`;
       setStepOrder(['1','2','3','4']); 
       goTo('3'); 
     }
     else if (pocketsmithValue.includes(value)) { 
-      document.getElementById('pocketsmith-subtext').textContent = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Pocketsmith's powerful financial forecasting platform.`;
+      document.getElementById('pocketsmith-subtext').innerHTML = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend <span class="clickable-company" onclick="redirectToPocketsmith()">Pocketsmith's</span> powerful financial forecasting platform.`;
       setStepOrder(['1','2','3-pocketsmith','4']); 
       goTo('3-pocketsmith'); 
     }
     else if (lowValue.includes(value)) { 
-      document.getElementById('monarch-subtext').textContent = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend Monarch Money's comprehensive financial management platform.`;
+      document.getElementById('monarch-subtext').innerHTML = `Here's how you track net worth automatically - just connect a few accounts and you're good to get a full financial picture. Based on your ${assetRange} net worth, we recommend <span class="clickable-company" onclick="redirectToMonarch()">Monarch Money's</span> comprehensive financial management platform.`;
       setStepOrder(['1','2','3-monarch','4']); 
       goTo('3-monarch'); 
     }

@@ -91,6 +91,19 @@
       display: block;
     }
     
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      min-width: 200px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      z-index: 1;
+      top: 100%;
+      left: 0;
+      margin-top: 0.5rem;
+    }
+    
     .dropdown-content a {
       color: #333;
       padding: 0.75rem 1rem;
@@ -106,6 +119,11 @@
     
     .dropdown-content a:hover {
       background-color: #f8f8f8;
+    }
+    
+    /* Keep dropdown open when hovering over content */
+    .dropdown-content:hover {
+      display: block;
     }
     
     /* Hamburger Menu Styles */
@@ -235,6 +253,14 @@
       padding: 2rem;
       border-radius: 12px;
       text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+      cursor: pointer;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background-color: #f0f0f0;
     }
     
     .feature-icon {
@@ -405,34 +431,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="#" class="nav-link" onclick="toggleDropdown(event, this)">Financial Tools ▼</a>
         <div class="dropdown-content">
           <a href="/lp/net-worth.html">Net Worth Tracker</a>
-          <a href="#">Budget Planner</a>
-          <a href="#">Investment Calculator</a>
-          <a href="#">Debt Payoff Tracker</a>
+          <a href="/lp/net-worth.html">Budget Planning</a>
+          <a href="/lp/net-worth.html">Investment Tracking</a>
+          <a href="/lp/net-worth.html">Debt Management</a>
         </div>
       </div>
       
       <div class="nav-item dropdown">
         <a href="#" class="nav-link" onclick="toggleDropdown(event, this)">Savings Guides ▼</a>
         <div class="dropdown-content">
-          <a href="#">Emergency Fund</a>
-          <a href="#">Retirement Planning</a>
-          <a href="#">Tax Optimization</a>
-          <a href="#">Insurance Strategies</a>
+          <a href="/lp/net-worth.html">Emergency Fund Planning</a>
+          <a href="/lp/net-worth.html">Retirement Planning</a>
+          <a href="/lp/net-worth.html">Tax Optimization</a>
+          <a href="/lp/net-worth.html">Insurance Strategies</a>
         </div>
       </div>
       
       <div class="nav-item dropdown">
         <a href="#" class="nav-link" onclick="toggleDropdown(event, this)">Product Reviews ▼</a>
         <div class="dropdown-content">
-          <a href="#">Best Credit Cards</a>
-          <a href="#">High-Yield Savings</a>
-          <a href="#">Investment Platforms</a>
-          <a href="#">Budgeting Apps</a>
+          <a href="/lp/net-worth.html">Best Credit Cards</a>
+          <a href="/lp/net-worth.html">High-Yield Savings</a>
+          <a href="/lp/net-worth.html">Investment Platforms</a>
+          <a href="/lp/net-worth.html">Budgeting Apps</a>
         </div>
       </div>
       
-      <a href="#" class="nav-link">About</a>
-      <a href="#" class="nav-link">Contact</a>
+      <a href="/lp/net-worth.html" class="nav-link">About</a>
+      <a href="/lp/net-worth.html" class="nav-link">Contact</a>
     </nav>
   </div>
 </div>
@@ -446,7 +472,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </p>
     <div>
       <a href="/lp/net-worth.html" class="cta-button">Start Your Net Worth Journey</a>
-      <a href="#" class="secondary-button">Learn More</a>
+      <a href="/lp/net-worth.html" class="secondary-button">Learn More</a>
     </div>
   </div>
 
@@ -481,41 +507,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="features-grid">
-    <div class="feature-card">
+    <a href="/lp/net-worth.html" class="feature-card" style="text-decoration: none; color: inherit; display: block;">
       <div class="feature-icon">📊</div>
       <h3 class="feature-title">Net Worth Tracking</h3>
       <p class="feature-description">
         Monitor your financial progress with our free net worth tracker. 
         See your wealth grow over time and identify areas for improvement.
       </p>
-    </div>
+    </a>
     
-    <div class="feature-card">
+    <a href="/lp/net-worth.html" class="feature-card" style="text-decoration: none; color: inherit; display: block;">
       <div class="feature-icon">🎯</div>
       <h3 class="feature-title">Smart Recommendations</h3>
       <p class="feature-description">
         Get personalized recommendations for financial products and services 
         that match your specific needs and goals.
       </p>
-    </div>
+    </a>
     
-    <div class="feature-card">
+    <a href="/lp/net-worth.html" class="feature-card" style="text-decoration: none; color: inherit; display: block;">
       <div class="feature-icon">📚</div>
       <h3 class="feature-title">Educational Resources</h3>
       <p class="feature-description">
         Learn proven strategies for saving money, investing wisely, and 
         building long-term wealth through our comprehensive guides.
       </p>
-    </div>
+    </a>
     
-    <div class="feature-card">
+    <a href="/lp/net-worth.html" class="feature-card" style="text-decoration: none; color: inherit; display: block;">
       <div class="feature-icon">⚡</div>
       <h3 class="feature-title">Quick Tools</h3>
       <p class="feature-description">
         Access calculators, planners, and trackers to optimize your 
         financial decisions and accelerate your wealth-building journey.
       </p>
-    </div>
+    </a>
   </div>
 
   <div class="content-section">
@@ -539,7 +565,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <div class="footer">
-  <p>&copy; 2024 SaveBest.org. All rights reserved. | <a href="#" style="color: #3f6b5d;">Privacy Policy</a> | <a href="#" style="color: #3f6b5d;">Terms of Service</a></p>
+  <p>&copy; 2024 SaveBest.org. All rights reserved.</p>
 </div>
 
 <script>
