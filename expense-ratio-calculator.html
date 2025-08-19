@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Ratio Calculator - SaveBest.org</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      line-height: 1.6;
+    }
+    .header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e6e6e6;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-width: 180px;
+      height: auto;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    p.intro {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .calculator {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .calculator label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+    }
+    .calculator input {
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .calculator button {
+      grid-column: 1 / -1;
+      padding: 0.75rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .results {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="nav-container">
+      <div class="logo"><a href="/"><img src="/assets/logo.png" alt="SaveBest.org"></a></div>
+    </div>
+  </div>
+  <div class="container">
+    <h1>Expense Ratio Calculator</h1>
+    <p class="intro">Expense ratios are the annual fees charged by mutual funds or ETFs. Even a small difference can have a big impact on your investment over time. Use this calculator to see how fees affect your future balance.</p>
+    <div class="calculator">
+      <label>Initial Investment ($)
+        <input type="number" id="initial" value="10000">
+      </label>
+      <label>Monthly Contribution ($)
+        <input type="number" id="contribution" value="1000">
+      </label>
+      <label>Years
+        <input type="number" id="years" value="30">
+      </label>
+      <label>Expected Annual ROI (%)
+        <input type="number" id="roi" value="8">
+      </label>
+      <label>Expense Ratio A (%)
+        <input type="number" id="erA" value="0.1" step="0.01">
+      </label>
+      <label>Expense Ratio B (%)
+        <input type="number" id="erB" value="0.5" step="0.01">
+      </label>
+      <button id="calculate">Calculate</button>
+    </div>
+    <canvas id="resultChart" height="100"></canvas>
+    <div class="results">
+      <div>Final Value A: $<span id="finalA">0</span></div>
+      <div>Final Value B: $<span id="finalB">0</span></div>
+      <div>Difference: $<span id="difference">0</span></div>
+    </div>
+  </div>
+  <script>
+    let chart;
+    function formatMoney(v){return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+    function calculate(){
+      const initial=parseFloat(document.getElementById('initial').value)||0;
+      const contribution=parseFloat(document.getElementById('contribution').value)||0;
+      const years=parseFloat(document.getElementById('years').value)||0;
+      const roi=parseFloat(document.getElementById('roi').value)||0;
+      const erA=parseFloat(document.getElementById('erA').value)||0;
+      const erB=parseFloat(document.getElementById('erB').value)||0;
+      const months=Math.round(years*12);
+      const monthlyA=(roi-erA)/12/100;
+      const monthlyB=(roi-erB)/12/100;
+      let balanceA=initial, balanceB=initial;
+      const labels=[],dataA=[],dataB=[];
+      for(let m=1;m<=months;m++){
+        balanceA=balanceA*(1+monthlyA)+contribution;
+        balanceB=balanceB*(1+monthlyB)+contribution;
+        if(m%12===0){
+          labels.push(m/12);
+          dataA.push(balanceA);
+          dataB.push(balanceB);
+        }
+      }
+      document.getElementById('finalA').textContent=formatMoney(balanceA);
+      document.getElementById('finalB').textContent=formatMoney(balanceB);
+      document.getElementById('difference').textContent=formatMoney(balanceA-balanceB);
+      const ctx=document.getElementById('resultChart').getContext('2d');
+      if(chart){chart.destroy();}
+      chart=new Chart(ctx,{
+        type:'line',
+        data:{labels:labels,datasets:[
+          {label:`Expense Ratio ${erA}%`,data:dataA,borderColor:'#007bff',fill:false},
+          {label:`Expense Ratio ${erB}%`,data:dataB,borderColor:'#ff5733',fill:false}
+        ]},
+        options:{
+          responsive:true,
+          scales:{
+            x:{title:{display:true,text:'Years'}},
+            y:{title:{display:true,text:'Balance ($)'},ticks:{callback:value=>'$'+value.toLocaleString()}}
+          }
+        }
+      });
+    }
+    document.getElementById('calculate').addEventListener('click',calculate);
+    calculate();
+  </script>
+</body>
+</html>
