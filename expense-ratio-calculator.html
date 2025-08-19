@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5SF9L94K');</script>
+  <!-- End Google Tag Manager -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Expense Ratio Calculator - SaveBest.org</title>
@@ -67,12 +70,17 @@
     .calculator button {
       grid-column: 1 / -1;
       padding: 0.75rem;
-      background-color: #007bff;
+      background-color: #3f6b5d;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 30px;
       cursor: pointer;
       font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+    .calculator button:hover {
+      background-color: #2d4f43;
     }
     .results {
       display: flex;
@@ -84,9 +92,56 @@
     canvas {
       max-width: 100%;
     }
+    .content-section {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+      text-align: left;
+    }
+    .content-section h2 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    .content-section h3 {
+      font-size: 1.3rem;
+      color: #3f6b5d;
+      margin-top: 1.5rem;
+    }
+    .brand-card {
+      border: 1px solid #e6e6e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .brand-card img {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      background-color: #3f6b5d;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: background-color 0.2s;
+      cursor: pointer;
+    }
+    .cta-button:hover {
+      background-color: #2d4f43;
+    }
   </style>
 </head>
 <body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SF9L94K" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
   <div class="header">
     <div class="nav-container">
       <div class="logo"><a href="/"><img src="/assets/logo.png" alt="SaveBest.org"></a></div>
@@ -123,6 +178,29 @@
       <div>Difference: $<span id="difference">0</span></div>
     </div>
   </div>
+  <section class="content-section">
+    <h2>Understanding Expense Ratios</h2>
+    <p>Expense ratios represent the annual fees that mutual funds and ETFs charge their investors. Even fractions of a percent can add up over decades, reducing the power of compounding in your portfolio.</p>
+    <h3>Finding Yours</h3>
+    <p>You can find a fund’s expense ratio by looking at the fund details in your brokerage account or on the fund’s website. To estimate your portfolio’s overall cost, multiply each holding’s expense ratio by its share of your total investments and add the results together.</p>
+    <h3>Common Pitfalls</h3>
+    <p>Be wary of high‑fee mutual funds and hidden 12b‑1 marketing fees. Always compare similar funds and remember that higher fees don’t guarantee better performance.</p>
+    <h3>Mutual Funds vs. ETFs</h3>
+    <p>ETFs typically offer lower expense ratios than actively managed mutual funds. When possible, choose low‑fee index funds or ETFs to keep more of your money working for you.</p>
+  </section>
+  <section class="content-section">
+    <h2>Tools to Track and Reduce Fees</h2>
+    <div class="brand-card">
+      <img src="/assets/empower-logo.svg" alt="Empower logo">
+      <p>Empower is a free personal finance dashboard where you can track net worth, see all your investments in one place, and get alerts if your expense ratios are too high.</p>
+      <a href="#" class="cta-button" onclick="redirectToEmpower()">Track with Empower</a>
+    </div>
+    <div class="brand-card">
+      <h3>M1 Finance</h3>
+      <p>M1 Finance is a free investment platform with easy portfolio management and a wide selection of low‑fee ETFs and mutual funds.</p>
+      <a href="#" class="cta-button" onclick="redirectToM1()">Invest with M1 Finance</a>
+    </div>
+  </section>
   <script>
     let chart;
     function formatMoney(v){return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -155,8 +233,8 @@
       chart=new Chart(ctx,{
         type:'line',
         data:{labels:labels,datasets:[
-          {label:`Expense Ratio ${erA}%`,data:dataA,borderColor:'#007bff',fill:false},
-          {label:`Expense Ratio ${erB}%`,data:dataB,borderColor:'#ff5733',fill:false}
+          {label:`Expense Ratio ${erA}%`,data:dataA,borderColor:'#3f6b5d',fill:false},
+          {label:`Expense Ratio ${erB}%`,data:dataB,borderColor:'#d32f2f',fill:false}
         ]},
         options:{
           responsive:true,
@@ -169,6 +247,74 @@
     }
     document.getElementById('calculate').addEventListener('click',calculate);
     calculate();
+  </script>
+  <script>
+    // User ID and gclid tracking
+    function generateUserId() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < 20; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    function getOrCreateUserId() {
+      let userId = localStorage.getItem('sabeid');
+      if (!userId) {
+        userId = generateUserId();
+        localStorage.setItem('sabeid', userId);
+      }
+      return userId;
+    }
+
+    function getGclid() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let gclid = urlParams.get('gclid');
+      if (gclid) {
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 90);
+        document.cookie = `gclid=${gclid}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax`;
+      }
+      if (!gclid) {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          const [name, value] = cookie.trim().split('=');
+          if (name === 'gclid') {
+            gclid = value;
+            break;
+          }
+        }
+      }
+      return gclid || '';
+    }
+
+    function redirectToEmpower() {
+      const sabeid = getOrCreateUserId();
+      const gclid = getGclid();
+      const baseUrl = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1058727&trid=1368848.157618&foc=16&fot=9999&fos=6';
+      const url = `${baseUrl}&fobs=${sabeid}&fobs2=${gclid}`;
+      window.open(url, '_blank');
+    }
+
+    function redirectToM1() {
+      const sabeid = getOrCreateUserId();
+      const gclid = getGclid();
+      const baseUrl = 'https://m1.finance/savebest';
+      const url = `${baseUrl}?fobs=${sabeid}&fobs2=${gclid}`;
+      window.open(url, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const userId = getOrCreateUserId();
+      if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+          'event': 'page_view',
+          'page_title': 'Expense Ratio Calculator',
+          'user_id': userId
+        });
+      }
+    });
   </script>
 </body>
 </html>
