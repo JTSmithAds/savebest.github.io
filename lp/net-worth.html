@@ -27,7 +27,6 @@
     .nav-links { display: flex; gap: 1rem; }
     .nav-links a { color: #888; text-decoration: none; cursor: pointer; }
     .hidden { display: none; }
-    .email-input { padding: 0.8rem; font-size: 1rem; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 1rem; width: 100%; }
     .fine-print { font-size: 0.75rem; color: #888; margin-top: 2rem; padding: 1rem; background-color: #f8f8f8; border-radius: 8px; line-height: 1.4; }
     .benefit-text { font-size: 0.9rem; color: #3f6b5d; font-weight: 500; margin-bottom: 1rem; }
     .urgency-text { font-size: 0.85rem; color: #d32f2f; font-weight: 500; margin-bottom: 1rem; }
@@ -338,11 +337,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div id="step-4" class="step hidden">
-    <div class="question">Get Your Personalized Financial Roadmap</div>
-    <div class="subtext" id="step4-subtext">We'll send you custom strategies to grow your net worth faster, plus exclusive access to our best money-saving tools.</div>
-    <div class="benefit-text">✓ Weekly wealth-building tips • Exclusive tool access • No spam, unsubscribe anytime</div>
-    <input type="email" placeholder="Enter your email address" class="email-input">
-    <div class="grid-buttons"><button class="submit-button" onclick="submitEmail()">Get My Free Roadmap →</button></div>
+    <div class="question">Want to cut investment costs?</div>
+    <div class="subtext">One of the biggest ways people save money is by understanding investment expense ratios. Use our <a href="/expense-ratio-calculator.html">Expense Ratio Calculator</a> to see how much you could save.</div>
+    <div class="grid-buttons"><button class="submit-button" onclick="trackFormEvent('net-worth','4','continue'); window.location.href='/expense-ratio-calculator.html';">Continue →</button></div>
   </div>
 
   <!-- Manual Calculation Steps -->
@@ -971,13 +968,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     syncHash(stepOrder[currentIndex]); 
     updateProgress(); 
     
-    // Update step 4 text with asset range if available
-    if (id === '4' && assetRange) {
-      const step4Subtext = document.getElementById('step4-subtext');
-      if (step4Subtext) {
-        step4Subtext.textContent = `We'll send you custom strategies to grow your ${assetRange} net worth faster, plus exclusive access to our best money-saving tools.`;
-      }
-    }
     
     // Handle manual results step
     if (id === 'manual-results') {
@@ -1175,56 +1165,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function submitEmail() {
-    const emailInput = document.querySelector('.email-input');
-    const email = emailInput.value.trim();
-    
-    if (isValidEmail(email)) {
-      trackFormEvent('net-worth', '4', 'submit', email);
-      
-      // Track email submission event
-      if (typeof dataLayer !== 'undefined') {
-        dataLayer.push({
-          'event': 'email_submit',
-          'email_provided': 'yes',
-          'user_id': getOrCreateUserId(),
-          'asset_range': assetRange,
-          'calculation_mode': calculationMode
-        });
-      }
-      
-      // Store user preferences
-      localStorage.setItem('savebest_user_preferences', JSON.stringify({
-        asset_range: assetRange,
-        calculation_mode: calculationMode,
-        email: email
-      }));
-      // Here you would typically send the data to your backend
-      alert('Thank you! We\'ll be in touch soon.');
-    } else {
-      trackFormEvent('net-worth', '4', 'invalid_email', email);
-      
-      // Track invalid email event
-      if (typeof dataLayer !== 'undefined') {
-        dataLayer.push({
-          'event': 'email_submit',
-          'email_provided': 'no',
-          'email_error': 'invalid_format',
-          'user_id': getOrCreateUserId(),
-          'asset_range': assetRange,
-          'calculation_mode': calculationMode
-        });
-      }
-      
-      alert('Please enter a valid email address.');
-    }
-  }
-
   function syncHash(stepId) { const desired = `#${stepId}`; if (location.hash !== desired) location.hash = desired; }
 
   // Help tooltip functionality
@@ -1293,8 +1233,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         content: "For users with $10k-$100k net worth, Pocketsmith offers advanced financial forecasting and cash flow planning that's perfect for your wealth-building stage. It helps you project your financial future, plan for major expenses, and track progress toward your goals. The platform's forecasting capabilities are unmatched for users looking to grow their wealth systematically."
       },
       '4': {
-        title: "Why are we asking for your email?",
-        content: "We want to send you personalized strategies to grow your wealth faster. Based on your net worth and current situation, we'll share specific tips, tools, and opportunities that are most relevant to you. You can unsubscribe anytime, and we'll never spam you."
+        title: "Why learn about expense ratios?",
+        content: "Investment fees can quietly cost you thousands over time. Understanding expense ratios helps you keep more of your returns. Use our calculator to see the impact."
       },
       'manual-cash': {
         title: "Why are we asking about cash?",
