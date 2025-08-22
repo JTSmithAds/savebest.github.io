@@ -574,6 +574,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     otherDebt: 0
   };
 
+  function getEmpowerClickValue(range, liquidAssets) {
+    if (typeof liquidAssets === 'number' && !isNaN(liquidAssets)) {
+      if (liquidAssets >= 200000) return 20;
+      if (liquidAssets >= 100000) return 10;
+      return 2;
+    }
+
+    switch (range) {
+      case '$500k–$1m':
+      case '$1m+':
+        return 20;
+      case '$100k–$500k':
+        return 10;
+      case '<$10k':
+      case '$10k–$50k':
+      case '$50k–$100k':
+        return 2;
+      default:
+        return 5;
+    }
+  }
+
   // Logarithmic slider configuration
   const sliderRanges = {
     cash: { min: 0, max: 500000, center: 25000 }, // $0 to $500k, center at $25k
@@ -1024,15 +1046,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function redirectToEmpower() {
     trackFormEvent('net-worth', '3', 'click', 'continue');
-    
+
     // Track the redirect event
+    const value = getEmpowerClickValue(assetRange);
     if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         'event': 'redirect_click',
         'redirect_destination': 'empower',
         'user_id': getOrCreateUserId(),
         'asset_range': assetRange,
-        'calculation_mode': calculationMode
+        'calculation_mode': calculationMode,
+        'value': value
       });
     }
     
@@ -1105,15 +1129,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function redirectToEmpowerManual() {
     trackFormEvent('net-worth', 'manual-empower', 'click', 'continue');
-    
+
     // Track the redirect event
+    const liquidAssets = manualData.cash + manualData.investments;
+    const value = getEmpowerClickValue(null, liquidAssets);
     if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         'event': 'redirect_click',
         'redirect_destination': 'empower',
         'user_id': getOrCreateUserId(),
         'asset_range': 'manual_calculation',
-        'calculation_mode': calculationMode
+        'calculation_mode': calculationMode,
+        'value': value
       });
     }
     
@@ -1208,9 +1235,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'calculation_mode': calculationMode
       });
     }
-    
+
     // Redirect to exit page with financial tool options
-    window.location.href = '/lp/nw-exit.html';
+    let query = '';
+    const hasManualData = manualData.cash > 0 || manualData.investments > 0;
+    if (hasManualData) {
+      const liquidAssets = manualData.cash + manualData.investments;
+      query = `?liquidAssets=${liquidAssets}`;
+    } else if (assetRange) {
+      query = `?assetRange=${encodeURIComponent(assetRange)}`;
+    }
+    window.location.href = '/lp/nw-exit.html' + query;
   }
 
   function getHelpContent() {
