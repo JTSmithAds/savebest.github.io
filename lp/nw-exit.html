@@ -303,13 +303,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return gclid || '';
   }
 
+  function getEmpowerClickValueFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const liquid = parseFloat(params.get('liquidAssets'));
+    if (!isNaN(liquid)) {
+      if (liquid >= 200000) return 20;
+      if (liquid >= 100000) return 10;
+      return 2;
+    }
+
+    const range = params.get('assetRange');
+    switch (range) {
+      case '$500k–$1m':
+      case '$1m+':
+        return 20;
+      case '$100k–$500k':
+        return 10;
+      case '<$10k':
+      case '$10k–$50k':
+      case '$50k–$100k':
+        return 2;
+      default:
+        return 5;
+    }
+  }
+
   function redirectToEmpower() {
     // Track the redirect event
+    const value = getEmpowerClickValueFromURL();
     if (typeof dataLayer !== 'undefined') {
       dataLayer.push({
         'event': 'redirect_click',
         'redirect_destination': 'empower',
-        'user_id': getOrCreateUserId()
+        'user_id': getOrCreateUserId(),
+        'value': value
       });
     }
     

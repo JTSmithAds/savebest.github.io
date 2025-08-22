@@ -292,6 +292,17 @@
     function redirectToEmpower() {
       const sabeid = getOrCreateUserId();
       const gclid = getGclid();
+
+      // Track the redirect with default value when assets are unknown
+      if (typeof dataLayer !== 'undefined') {
+        dataLayer.push({
+          'event': 'redirect_click',
+          'redirect_destination': 'empower',
+          'user_id': sabeid,
+          'value': 5
+        });
+      }
+
       const baseUrl = 'https://track.flexlinkspro.com/g.ashx?foid=156074.13439.1058727&trid=1368848.157618&foc=16&fot=9999&fos=6';
       const url = `${baseUrl}&fobs=${sabeid}&fobs2=${gclid}`;
       window.open(url, '_blank');
